@@ -2,5 +2,33 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.yoonho.holostats.domain.member.repository.MemberRepository">
+<mapper namespace="com.yoonho.holostats.repositories.MemberRepository">
+
+    <select id="getMemberById" resultType="com.yoonho.holostats.models.Member">
+        <include refid="member"/>
+        WHERE 1=1
+        AND
+            MEMBER_ID = #{memberId}
+    </select>
+
+    <select id="getMemberByName" resultType="com.yoonho.holostats.models.Member">
+        <include refid="member"/>
+        WHERE 1=1
+          AND
+            MEMBER_NAME = #{memberName}
+    </select>
+
+    <sql id="member">
+        SELECT
+            MEMBER_ID           AS memberID,
+            MEMBER_NAME         AS memberName,
+            MEMBER_NICKNAME     AS memberNickName,
+            MEMBER_PASSWORD     AS memberPassword,
+            MEMBER_THUMBNAIL_ID AS memberThumbnailId,
+            MEMBER_STATUS       AS memberStatus,
+            MEMBER_ROLE         AS memberRole,
+            CREATE_TIME         AS createTime,
+            UPDATE_TIME         AS updateTime
+        FROM TB_MEMBER
+    </sql>
 </mapper>
