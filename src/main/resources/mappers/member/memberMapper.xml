@@ -31,4 +31,23 @@
             UPDATE_TIME         AS updateTime
         FROM TB_MEMBER
     </sql>
+
+    <insert id="insertMember" useGeneratedKeys="true" keyColumn="memberId" parameterType="com.yoonho.holostats.models.Member">
+        INSERT INTO TB_MEMBER(
+            MEMBER_NAME,
+            MEMBER_NICKNAME,
+            MEMBER_PASSWORD,
+            MEMBER_THUMBNAIL_ID,
+            MEMBER_STATUS,
+            MEMBER_ROLE
+        )
+        VALUES (
+            #{member.memberName},
+            #{member.memberNickName},
+            #{member.memberPassword},
+            #{member.memberThumbnailId},
+            #{member.memberStatus},
+            #{member.memberRole}
+        )
+    </insert>
 </mapper>

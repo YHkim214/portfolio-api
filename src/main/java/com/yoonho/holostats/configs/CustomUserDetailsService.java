@@ -2,6 +2,7 @@ package com.yoonho.holostats.configs;
 
 import com.yoonho.holostats.models.Member;
 import com.yoonho.holostats.repositories.MemberRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
