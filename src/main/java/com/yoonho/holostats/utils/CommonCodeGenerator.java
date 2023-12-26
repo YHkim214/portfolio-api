@@ -47,6 +47,7 @@ public class CommonCodeGenerator {
 
             stringBuilder.append("\t\t\tpublic static final String CODE = \"" + commonCode.getCommonCode() + "\";\n");
             stringBuilder.append("\t\t\tpublic static final String DESC = \"" + commonCode.getCommonCodeDesc() + "\";\n");
+            stringBuilder.append("\t\t\tpublic static final String VAL = \"" + commonCode.getCommonCodeVal() + "\";\n");
 
             stringBuilder.append("\t\t}\n");
         }

@@ -15,6 +15,6 @@ import com.yoonho.holostats.dtos.RegisterMemberDto;
  */
 public interface MemberService {
 
-    void insertMember(RegisterMemberDto registerMemberDto);
+    void registerMember(RegisterMemberDto registerMemberDto);
 
 }

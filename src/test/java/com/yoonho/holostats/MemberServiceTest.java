@@ -31,7 +31,7 @@ public class MemberServiceTest {
         registerMemberDto.setMemberThumbnailFile(null);
         registerMemberDto.setMemberNickName("TestNick");
 
-        memberService.insertMember(registerMemberDto);
+        memberService.registerMember(registerMemberDto);
     }
 
 }

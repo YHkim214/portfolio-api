@@ -28,18 +28,22 @@ public class MemberServiceImpl implements MemberService {
 
     private final PasswordEncoder passwordEncoder;
 
-    public MemberServiceImpl(MemberRepository memberRepository, FileService fileService, PasswordEncoder passwordEncoder) {
+    public MemberServiceImpl(MemberRepository memberRepository,
+                             FileService fileService,
+                             PasswordEncoder passwordEncoder) {
         this.memberRepository = memberRepository;
         this.fileService = fileService;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public void insertMember(RegisterMemberDto registerMemberDto) {
+    public void registerMember(RegisterMemberDto registerMemberDto) {
         Member member = new Member();
+
         member.setMemberName(registerMemberDto.getMemberName());
-        member.setMemberPassword(registerMemberDto.getMemberPassword());
+        member.setMemberPassword(passwordEncoder.encode(registerMemberDto.getMemberPassword()));
         member.setMemberNickName(registerMemberDto.getMemberNickName());
+
         //TODO 파일 등록 비즈니스 로직 개발
         member.setMemberThumbnailId(0);
 

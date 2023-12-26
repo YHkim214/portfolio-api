@@ -10,6 +10,7 @@
             COMMON_CODE_DESC    AS  commonCodeDesc,
             COMMON_CODE         AS  commonCode,
             COMMON_CODE_DESC    AS  commonCodeDesc,
+            COMMON_CODE_VAL     AS  commonCodeVal,
             CREATE_TIME         AS  createTime,
             UPDATE_TIME         AS  updateTime
         FROM

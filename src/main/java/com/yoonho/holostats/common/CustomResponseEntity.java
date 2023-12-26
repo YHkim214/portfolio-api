@@ -6,7 +6,7 @@ public class CustomResponseEntity<T> {
     private T data;
 
     public static <T> CustomResponseEntity<T> success(T data) {
-        return new CustomResponseEntity<>(new ResponseHeader("200", "성공"), data);
+        return new CustomResponseEntity<>(new ResponseHeader(CommonCodes.ERROR_CODE.ERROR_CODE_NONE.VAL, CommonCodes.ERROR_CODE.ERROR_CODE_NONE.DESC), data);
     }
 
     public static CustomResponseEntity<?> error(String code, String message) {

@@ -24,6 +24,7 @@ public class CommonCode {
    private String CommonCodeGroupDesc;  /*공통코드 그룹 설명*/
    private String CommonCode;           /*공통코드*/
    private String CommonCodeDesc;       /*공통코드 설명*/
+   private String CommonCodeVal;        /*공통코드 값(optional)*/
    private Timestamp createTime;        /*생성시각*/
    private Timestamp updateTime;        /*수정시각*/
 
