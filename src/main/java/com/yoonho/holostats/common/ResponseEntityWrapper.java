@@ -1,0 +1,29 @@
+package com.yoonho.holostats.common;
+
+import org.springframework.http.ResponseEntity;
+
+/**
+ * packageName    : com.yoonho.holostats.common
+ * fileName       : ResponseEntitu
+ * author         : kim-yoonho
+ * date           : 12/27/23
+ * description    :
+ * ===========================================================
+ * DATE              AUTHOR             NOTE
+ * -----------------------------------------------------------
+ * 12/27/23        kim-yoonho       최초 생성
+ */
+public class ResponseEntityWrapper {
+
+    public static <T> ResponseEntity<ResponseBody<T>> success(T data) {
+        return ResponseEntity
+                .ok(new ResponseBody<T>(data, CommonCodes.ERROR_CODE.ERROR_CODE_NONE.VAL, CommonCodes.ERROR_CODE.ERROR_CODE_NONE.DESC));
+    }
+
+    public static ResponseEntity fail(Integer code, String message) {
+        return ResponseEntity
+                .badRequest()
+                .body(new ResponseBody(null, String.valueOf(code), message));
+    }
+
+}

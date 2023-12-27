@@ -1,12 +1,14 @@
 package com.yoonho.holostats.services;
 
+import com.yoonho.holostats.exceptions.ApiException;
 import com.yoonho.holostats.common.CommonCodes;
 import com.yoonho.holostats.dtos.RegisterMemberDto;
-import com.yoonho.holostats.models.CommonCode;
 import com.yoonho.holostats.models.Member;
 import com.yoonho.holostats.repositories.MemberRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 /**
  * packageName    : com.yoonho.holostats.services
@@ -38,6 +40,15 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void registerMember(RegisterMemberDto registerMemberDto) {
+        //중복체크
+        Optional<Member> memberDb = memberRepository.getMemberByName(registerMemberDto.getMemberName());
+
+        if(memberDb.isPresent()) {
+            throw new ApiException(
+                    Integer.parseInt(CommonCodes.ERROR_CODE.ERROR_CODE_API.VAL)
+                    , CommonCodes.ERROR_CODE.ERROR_CODE_API.DESC);
+        }
+
         Member member = new Member();
 
         member.setMemberName(registerMemberDto.getMemberName());

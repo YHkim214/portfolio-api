@@ -1,8 +1,11 @@
 package com.yoonho.holostats.controllers;
 
-import com.yoonho.holostats.common.CustomResponseEntity;
+import com.yoonho.holostats.common.ResponseEntityWrapper;
+import com.yoonho.holostats.dtos.LoginDto;
 import com.yoonho.holostats.dtos.RegisterMemberDto;
+import com.yoonho.holostats.services.AuthService;
 import com.yoonho.holostats.services.MemberService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -19,20 +22,31 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
-public class AuthController {
+public class AuthController extends CustomController {
 
     private final MemberService memberService;
+    private final AuthService authService;
 
-    public AuthController(MemberService memberService) {
+    public AuthController(MemberService memberService, AuthService authService) {
         this.memberService = memberService;
+        this.authService = authService;
     }
 
     @PostMapping("/register")
     @ResponseBody
-    public CustomResponseEntity register(@RequestBody RegisterMemberDto registerMemberDto) {
+    public ResponseEntity register(@RequestBody RegisterMemberDto registerMemberDto) {
 
         memberService.registerMember(registerMemberDto);
 
-        return CustomResponseEntity.success(null);
+        return ResponseEntityWrapper.success(null);
+    }
+
+    @PostMapping("/login")
+    @ResponseBody
+    public ResponseEntity login(@RequestBody LoginDto loginDto) {
+
+        authService.login(loginDto);
+
+        return ResponseEntityWrapper.success(null);
     }
 }
