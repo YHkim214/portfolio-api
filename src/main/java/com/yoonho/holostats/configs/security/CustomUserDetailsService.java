@@ -18,7 +18,7 @@ import java.util.List;
  * fileName       : CustomUserDetailService
  * author         : kim-yoonho
  * date           : 12/27/23
- * description    : Jwt토큰 생성 클래스
+ * description    : spring security 커스텀 유저정보 서비스
  * ===========================================================
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------

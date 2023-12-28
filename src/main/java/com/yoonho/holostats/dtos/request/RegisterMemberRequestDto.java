@@ -9,7 +9,7 @@ import java.io.File;
  * fileName       : RegisterMemberRequestDto
  * author         : kim-yoonho
  * date           : 12/27/23
- * description    :
+ * description    : 회원등록 dto
  * ===========================================================
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------

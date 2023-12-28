@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
  * fileName       : AuthController
  * author         : kim-yoonho
  * date           : 12/26/23
- * description    :
+ * description    : 인증 컨트롤러
  * ===========================================================
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
  * fileName       : CommonController
  * author         : kim-yoonho
  * date           : 12/27/23
- * description    : 상수
+ * description    : 공통 예외처리를 위한 컨트롤러
  * ===========================================================
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------

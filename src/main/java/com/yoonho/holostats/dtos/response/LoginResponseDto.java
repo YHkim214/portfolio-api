@@ -7,7 +7,7 @@ import lombok.Data;
  * fileName       : LoginResponseDto
  * author         : kim-yoonho
  * date           : 12/28/23
- * description    :
+ * description    : 로그인 응답 dto
  * ===========================================================
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------

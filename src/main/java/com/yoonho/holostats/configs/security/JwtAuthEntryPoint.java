@@ -14,7 +14,7 @@ import java.io.IOException;
  * fileName       : JwtAuthEntryPoint
  * author         : kim-yoonho
  * date           : 12/27/23
- * description    :
+ * description    : Jwt 인증 엔트리포인트
  * ===========================================================
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------

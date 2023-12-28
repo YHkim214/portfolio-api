@@ -9,7 +9,7 @@ import java.sql.Timestamp;
  * fileName       : Member
  * author         : kim-yoonho
  * date           : 12/21/23
- * description    : 공통코드 객체
+ * description    : 회원정보 모델
  * ===========================================================
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------

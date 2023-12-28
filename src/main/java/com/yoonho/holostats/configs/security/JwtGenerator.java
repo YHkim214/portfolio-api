@@ -15,7 +15,7 @@ import java.util.Date;
  * fileName       : JwtGenerator
  * author         : kim-yoonho
  * date           : 12/27/23
- * description    : Jwt토큰 생성 클래스
+ * description    : Jwt 토큰 생성 클래스
  * ===========================================================
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------

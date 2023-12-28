@@ -14,7 +14,6 @@ import lombok.Data;
  * -----------------------------------------------------------
  * 12/27/23        kim-yoonho       최초 생성
  */
-
 @Data
 @AllArgsConstructor
 public class ResponseBody<T> {

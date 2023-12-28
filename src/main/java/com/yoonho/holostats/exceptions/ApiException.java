@@ -8,7 +8,7 @@ import lombok.Setter;
  * fileName       : ApiException
  * author         : kim-yoonho
  * date           : 12/21/23
- * description    : 공통코드 객체
+ * description    : api 관련 예외 처리
  * ===========================================================
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------

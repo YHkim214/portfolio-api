@@ -14,7 +14,7 @@ import javax.sql.DataSource;
  * fileName       : MybatisConfig
  * author         : kim-yoonho
  * date           : 12/27/23
- * description    : Jwt토큰 생성 클래스
+ * description    : 데이터 베이스 설정
  * ===========================================================
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------

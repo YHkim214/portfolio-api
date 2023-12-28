@@ -1,6 +1,16 @@
 package com.yoonho.holostats.common;
 
-/**공통코드 객체**/
+/**
+ * packageName    : com.yoonho.holostats.common
+ * fileName       : CommonCodes
+ * author         : kim-yoonho
+ * date           : 12/27/23
+ * description    : 공통코드 클래스
+ * ===========================================================
+ * DATE              AUTHOR             NOTE
+ * -----------------------------------------------------------
+ * 12/27/23        kim-yoonho       최초 생성
+ */
 public class CommonCodes {
     public static final class ERROR_CODE {
         public static final class ERROR_CODE_API {

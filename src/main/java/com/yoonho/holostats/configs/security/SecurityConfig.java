@@ -24,7 +24,7 @@ import java.util.List;
  * fileName       : SecurityConfig
  * author         : kim-yoonho
  * date           : 12/27/23
- * description    : Jwt토큰 생성 클래스
+ * description    : 보안 설정
  * ===========================================================
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------
