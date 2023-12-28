@@ -1,6 +1,7 @@
 package com.yoonho.holostats.services;
 
-import com.yoonho.holostats.dtos.LoginDto;
+import com.yoonho.holostats.dtos.request.LoginRequestDto;
+import com.yoonho.holostats.dtos.response.LoginResponseDto;
 
 /**
  * packageName    : com.yoonho.holostats.services
@@ -15,6 +16,6 @@ import com.yoonho.holostats.dtos.LoginDto;
  */
 public interface AuthService {
 
-    public void login(LoginDto loginDto);
+    LoginResponseDto login(LoginRequestDto loginRequestDto);
 
 }

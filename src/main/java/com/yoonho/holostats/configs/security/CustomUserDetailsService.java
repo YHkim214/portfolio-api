@@ -1,8 +1,7 @@
-package com.yoonho.holostats.configs;
+package com.yoonho.holostats.configs.security;
 
 import com.yoonho.holostats.models.Member;
 import com.yoonho.holostats.repositories.MemberRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -13,8 +12,18 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
+/**
+ * packageName    : com.yoonho.holostats.configs.security
+ * fileName       : CustomUserDetailService
+ * author         : kim-yoonho
+ * date           : 12/27/23
+ * description    : Jwt토큰 생성 클래스
+ * ===========================================================
+ * DATE              AUTHOR             NOTE
+ * -----------------------------------------------------------
+ * 12/27/23        kim-yoonho       최초 생성
+ */
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {

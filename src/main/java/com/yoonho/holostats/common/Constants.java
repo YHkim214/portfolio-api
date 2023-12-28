@@ -5,7 +5,7 @@ package com.yoonho.holostats.common;
  * fileName       : Constants
  * author         : kim-yoonho
  * date           : 12/27/23
- * description    :
+ * description    : 상수
  * ===========================================================
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------

@@ -4,7 +4,17 @@ import lombok.Data;
 
 import java.sql.Timestamp;
 
-/**회원 정보**/
+/**
+ * packageName    : com.yoonho.holostats.models
+ * fileName       : Member
+ * author         : kim-yoonho
+ * date           : 12/21/23
+ * description    : 공통코드 객체
+ * ===========================================================
+ * DATE              AUTHOR             NOTE
+ * -----------------------------------------------------------
+ * 12/21/23        kim-yoonho       최초 생성
+ */
 @Data
 public class Member {
 

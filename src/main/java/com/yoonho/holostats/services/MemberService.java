@@ -1,6 +1,6 @@
 package com.yoonho.holostats.services;
 
-import com.yoonho.holostats.dtos.RegisterMemberDto;
+import com.yoonho.holostats.dtos.request.RegisterMemberRequestDto;
 
 /**
  * packageName    : com.yoonho.holostats.services
@@ -15,6 +15,6 @@ import com.yoonho.holostats.dtos.RegisterMemberDto;
  */
 public interface MemberService {
 
-    void registerMember(RegisterMemberDto registerMemberDto);
+    void registerMember(RegisterMemberRequestDto registerMemberRequestDto);
 
 }

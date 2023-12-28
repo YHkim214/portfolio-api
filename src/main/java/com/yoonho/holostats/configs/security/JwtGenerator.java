@@ -1,4 +1,4 @@
-package com.yoonho.holostats.configs;
+package com.yoonho.holostats.configs.security;
 
 import com.yoonho.holostats.common.Constants;
 import io.jsonwebtoken.Claims;
@@ -11,11 +11,11 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 
 /**
- * packageName    : com.yoonho.holostats.configs
+ * packageName    : com.yoonho.holostats.configs.security
  * fileName       : JwtGenerator
  * author         : kim-yoonho
  * date           : 12/27/23
- * description    :
+ * description    : Jwt토큰 생성 클래스
  * ===========================================================
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------
@@ -33,7 +33,7 @@ public class JwtGenerator {
             .setSubject(userName)
             .setIssuedAt(curDate)
             .setExpiration(expDate)
-            .signWith(SignatureAlgorithm.ES512, Constants.JWT_SECRET)
+            .signWith(SignatureAlgorithm.HS512, Constants.JWT_SECRET)
             .compact();
     }
 

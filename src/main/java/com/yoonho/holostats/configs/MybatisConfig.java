@@ -9,6 +9,18 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import javax.sql.DataSource;
 
+/**
+ * packageName    : com.yoonho.holostats.configs
+ * fileName       : MybatisConfig
+ * author         : kim-yoonho
+ * date           : 12/27/23
+ * description    : Jwt토큰 생성 클래스
+ * ===========================================================
+ * DATE              AUTHOR             NOTE
+ * -----------------------------------------------------------
+ * 12/27/23        kim-yoonho       최초 생성
+ */
+
 @Configuration
 public class MybatisConfig {
 

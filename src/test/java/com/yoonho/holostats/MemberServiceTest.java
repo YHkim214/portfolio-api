@@ -1,6 +1,6 @@
 package com.yoonho.holostats;
 
-import com.yoonho.holostats.dtos.RegisterMemberDto;
+import com.yoonho.holostats.dtos.request.RegisterMemberRequestDto;
 import com.yoonho.holostats.services.MemberService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +25,13 @@ public class MemberServiceTest {
 
     @Test
     void insertMember() {
-        RegisterMemberDto registerMemberDto = new RegisterMemberDto();
-        registerMemberDto.setMemberName("Test");
-        registerMemberDto.setMemberPassword("1111");
-        registerMemberDto.setMemberThumbnailFile(null);
-        registerMemberDto.setMemberNickName("TestNick");
+        RegisterMemberRequestDto registerMemberRequestDto = new RegisterMemberRequestDto();
+        registerMemberRequestDto.setMemberName("Test");
+        registerMemberRequestDto.setMemberPassword("1111");
+        registerMemberRequestDto.setMemberThumbnailFile(null);
+        registerMemberRequestDto.setMemberNickName("TestNick");
 
-        memberService.registerMember(registerMemberDto);
+        memberService.registerMember(registerMemberRequestDto);
     }
 
 }

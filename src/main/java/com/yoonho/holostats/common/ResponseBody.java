@@ -8,7 +8,7 @@ import lombok.Data;
  * fileName       : ResponseBody
  * author         : kim-yoonho
  * date           : 12/27/23
- * description    :
+ * description    : 공통 리스폰스 바디
  * ===========================================================
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------

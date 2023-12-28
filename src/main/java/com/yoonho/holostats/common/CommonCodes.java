@@ -1,6 +1,6 @@
 package com.yoonho.holostats.common;
 
-/*공통코드 객체*/
+/**공통코드 객체**/
 public class CommonCodes {
     public static final class ERROR_CODE {
         public static final class ERROR_CODE_API {

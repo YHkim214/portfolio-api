@@ -1,6 +1,8 @@
 package com.yoonho.holostats.services;
 
-import com.yoonho.holostats.dtos.LoginDto;
+import com.yoonho.holostats.configs.security.JwtGenerator;
+import com.yoonho.holostats.dtos.request.LoginRequestDto;
+import com.yoonho.holostats.dtos.response.LoginResponseDto;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,15 +25,22 @@ public class AuthServiceImpl implements AuthService{
 
     private final AuthenticationManager authenticationManager;
 
-    public AuthServiceImpl(AuthenticationManager authenticationManager) {
+    private final JwtGenerator jwtGenerator;
+
+    public AuthServiceImpl(AuthenticationManager authenticationManager, JwtGenerator jwtGenerator) {
         this.authenticationManager = authenticationManager;
+        this.jwtGenerator = jwtGenerator;
     }
 
     @Override
-    public void login(LoginDto loginDto) {
+    public LoginResponseDto login(LoginRequestDto loginRequestDto) {
         Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(loginDto.getMemberName(), loginDto.getMemberPassword()));
+                .authenticate(new UsernamePasswordAuthenticationToken(loginRequestDto.getMemberName(), loginRequestDto.getMemberPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        String token = jwtGenerator.generateToken(authentication);
+
+        return new LoginResponseDto(token);
     }
 
 }

@@ -2,7 +2,7 @@ package com.yoonho.holostats.services;
 
 import com.yoonho.holostats.exceptions.ApiException;
 import com.yoonho.holostats.common.CommonCodes;
-import com.yoonho.holostats.dtos.RegisterMemberDto;
+import com.yoonho.holostats.dtos.request.RegisterMemberRequestDto;
 import com.yoonho.holostats.models.Member;
 import com.yoonho.holostats.repositories.MemberRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -39,9 +39,9 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void registerMember(RegisterMemberDto registerMemberDto) {
+    public void registerMember(RegisterMemberRequestDto registerMemberRequestDto) {
         //중복체크
-        Optional<Member> memberDb = memberRepository.getMemberByName(registerMemberDto.getMemberName());
+        Optional<Member> memberDb = memberRepository.getMemberByName(registerMemberRequestDto.getMemberName());
 
         if(memberDb.isPresent()) {
             throw new ApiException(
@@ -51,9 +51,9 @@ public class MemberServiceImpl implements MemberService {
 
         Member member = new Member();
 
-        member.setMemberName(registerMemberDto.getMemberName());
-        member.setMemberPassword(passwordEncoder.encode(registerMemberDto.getMemberPassword()));
-        member.setMemberNickName(registerMemberDto.getMemberNickName());
+        member.setMemberName(registerMemberRequestDto.getMemberName());
+        member.setMemberPassword(passwordEncoder.encode(registerMemberRequestDto.getMemberPassword()));
+        member.setMemberNickName(registerMemberRequestDto.getMemberNickName());
 
         //TODO 파일 등록 비즈니스 로직 개발
         member.setMemberThumbnailId(0);

@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
  * fileName       : ResponseEntitu
  * author         : kim-yoonho
  * date           : 12/27/23
- * description    :
+ * description    : 스프링 리스폰스 객체 래퍼
  * ===========================================================
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------
