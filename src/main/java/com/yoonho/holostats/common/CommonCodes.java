@@ -23,6 +23,11 @@ public class CommonCodes {
             public static final String DESC = "api 통신 성공.";
             public static final String VAL = "200";
         }
+        public static final class ERROR_CODE_DUP_MEMBER {
+            public static final String CODE = "ERROR_CODE_DUP_MEMBER";
+            public static final String DESC = "중복된 아이디 입니다";
+            public static final String VAL = "901";
+        }
     }
     public static final class MEMBER_ROLE {
         public static final class ROLE_USER {

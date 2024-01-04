@@ -32,7 +32,7 @@
         FROM TB_MEMBER
     </sql>
 
-    <insert id="insertMember" useGeneratedKeys="true" keyColumn="memberId" parameterType="com.yoonho.holostats.models.Member">
+    <insert id="insertMember" useGeneratedKeys="true" keyProperty="memberId" parameterType="com.yoonho.holostats.models.Member">
         INSERT INTO TB_MEMBER(
             MEMBER_NAME,
             MEMBER_NICKNAME,

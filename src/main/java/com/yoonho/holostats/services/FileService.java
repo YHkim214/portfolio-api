@@ -1,5 +1,10 @@
 package com.yoonho.holostats.services;
 
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+
 /**
  * packageName    : com.yoonho.holostats.services
  * fileName       : FileServiceImpl
@@ -13,4 +18,5 @@ package com.yoonho.holostats.services;
  */
 
 public interface FileService {
+    void registerThumbnailFile(MultipartFile multipartFile, Integer memberId) throws IOException;
 }

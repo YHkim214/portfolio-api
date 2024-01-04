@@ -7,8 +7,11 @@ import com.yoonho.holostats.dtos.request.RegisterMemberRequestDto;
 import com.yoonho.holostats.dtos.response.LoginResponseDto;
 import com.yoonho.holostats.services.AuthService;
 import com.yoonho.holostats.services.MemberService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 /**
  * packageName    : com.yoonho.holostats.controllers
@@ -34,9 +37,9 @@ public class AuthController extends CommonController {
         this.authService = authService;
     }
 
-    @PostMapping("/register")
+    @PostMapping(value = "/register", consumes = "multipart/form-data")
     @ResponseBody
-    public ResponseEntity register(@RequestBody RegisterMemberRequestDto registerMemberRequestDto) {
+    public ResponseEntity register(@ModelAttribute RegisterMemberRequestDto registerMemberRequestDto) throws IOException {
 
         memberService.registerMember(registerMemberRequestDto);
 

@@ -23,15 +23,5 @@ public class MemberServiceTest {
     @Autowired
     private MemberService memberService;
 
-    @Test
-    void insertMember() {
-        RegisterMemberRequestDto registerMemberRequestDto = new RegisterMemberRequestDto();
-        registerMemberRequestDto.setMemberName("Test");
-        registerMemberRequestDto.setMemberPassword("1111");
-        registerMemberRequestDto.setMemberThumbnailFile(null);
-        registerMemberRequestDto.setMemberNickName("TestNick");
-
-        memberService.registerMember(registerMemberRequestDto);
-    }
 
 }

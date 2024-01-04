@@ -1,8 +1,10 @@
 package com.yoonho.holostats.dtos.request;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.Serializable;
 
 /**
  * packageName    : com.yoonho.holostats.dtos.request
@@ -17,9 +19,9 @@ import java.io.File;
  */
 
 @Data
-public class RegisterMemberRequestDto {
+public class RegisterMemberRequestDto implements Serializable {
     private String memberName;
     private String memberPassword;
     private String memberNickName;
-    private File memberThumbnailFile;
+    private MultipartFile memberThumbnailFile;
 }

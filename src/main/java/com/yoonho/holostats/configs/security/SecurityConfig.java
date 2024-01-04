@@ -53,6 +53,7 @@ public class SecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                     .requestMatchers("/auth/**").permitAll()
+                    .requestMatchers("/uploads/**").permitAll()
                     .anyRequest().authenticated()
             )
             .formLogin(Customizer.withDefaults())
@@ -75,9 +76,10 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(List.of("*"));
-        corsConfiguration.setAllowedMethods(List.of("GET", "POST"));
         corsConfiguration.setAllowCredentials(true);
+//        corsConfiguration.setAllowedOrigins(List.of("*"));
+        corsConfiguration.addAllowedOriginPattern("*");
+        corsConfiguration.setAllowedMethods(List.of("GET", "POST"));
         corsConfiguration.setAllowedHeaders(List.of("*"));
         corsConfiguration.setMaxAge(3600L);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
