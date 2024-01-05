@@ -1,6 +1,6 @@
 package com.yoonho.holostats.services;
 
-import jakarta.servlet.http.HttpServletRequest;
+import com.yoonho.holostats.models.DbFile;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -18,5 +18,5 @@ import java.io.IOException;
  */
 
 public interface FileService {
-    void registerThumbnailFile(MultipartFile multipartFile, Integer memberId) throws IOException;
+    DbFile registerFile(MultipartFile multipartFile, Integer memberId, String FileType) throws IOException;
 }

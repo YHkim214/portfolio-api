@@ -1,5 +1,6 @@
 package com.yoonho.holostats.dtos.request;
 
+import jakarta.annotation.Nullable;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 

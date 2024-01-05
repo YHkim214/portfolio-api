@@ -23,5 +23,9 @@ public class MemberServiceTest {
     @Autowired
     private MemberService memberService;
 
+    @Test
+    void getMemberTest() {
+        System.out.println(memberService.getMemberByName("yoonho214"));
+    }
 
 }

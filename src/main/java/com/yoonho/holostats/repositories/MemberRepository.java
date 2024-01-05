@@ -22,4 +22,5 @@ public interface MemberRepository {
     Optional<Member> getMemberById(@Param("memberId") Integer memberId);
     Optional<Member> getMemberByName(@Param("memberName") String memberName);
     void insertMember(@Param("member") Member member);
+    void updateMember(@Param("member") Member member);
 }

@@ -28,4 +28,6 @@ public class Member {
     private Timestamp createTime;       /*가입일*/
     private Timestamp updateTime;       /*마지막 수정일*/
 
+    private DbFile memberThumbnailFile;       /*섬네일 파일*/
+
 }

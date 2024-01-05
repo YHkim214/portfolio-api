@@ -43,7 +43,8 @@ public class JwtGenerator {
                 .setSigningKey(Constants.JWT_SECRET)
                 .parseClaimsJws(token)
                 .getBody();
-        return claims.getSubject();
+        String result = claims.getSubject();
+        return result;
     }
 
     public boolean validateToken(String token) {
@@ -54,7 +55,6 @@ public class JwtGenerator {
                 .parseClaimsJws(token);
             return true;
         } catch (Exception e) {
-            //TODO 하드코딩 걷어내기
             throw new AuthenticationCredentialsNotFoundException("JWT토큰이 만료되었거나, 유효하지 않습니다.");
         }
     }

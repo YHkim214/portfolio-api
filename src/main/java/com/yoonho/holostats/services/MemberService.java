@@ -1,7 +1,8 @@
 package com.yoonho.holostats.services;
 
 import com.yoonho.holostats.dtos.request.RegisterMemberRequestDto;
-import jakarta.servlet.http.HttpServletRequest;
+import com.yoonho.holostats.dtos.response.GetMemberInfoResponseDto;
+import com.yoonho.holostats.models.Member;
 
 import java.io.IOException;
 
@@ -19,5 +20,6 @@ import java.io.IOException;
 public interface MemberService {
 
     void registerMember(RegisterMemberRequestDto registerMemberRequestDto) throws IOException;
+    GetMemberInfoResponseDto getMemberByName(String memberName);
 
 }

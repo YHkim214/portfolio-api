@@ -35,11 +35,11 @@ public class DbFile {
 
     private Integer fileId;         //파일아이디
     private String fileType;        //파일 유형
-    private String fileAbsPath;     //파일 절대경로
-    private String fileRelPath;     //파일 상대경로
+    private String filePath;        //파일 경로
+    private String fileUrl;         //파일 url
     private String fileName;        //파일명
     private String fileExt;         //파일확장자
-    private String fileSize;        //파일크기
+    private Long fileSize;        //파일크기
     private Timestamp createTime;   //생성일시
     private Timestamp updateTime;   //수정일시
 

@@ -1,15 +1,17 @@
 package com.yoonho.holostats.services;
 
+import com.yoonho.holostats.dtos.response.GetMemberInfoResponseDto;
 import com.yoonho.holostats.exceptions.ApiException;
 import com.yoonho.holostats.common.CommonCodes;
 import com.yoonho.holostats.dtos.request.RegisterMemberRequestDto;
+import com.yoonho.holostats.models.DbFile;
 import com.yoonho.holostats.models.Member;
 import com.yoonho.holostats.repositories.MemberRepository;
-import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -45,6 +47,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public void registerMember(RegisterMemberRequestDto registerMemberRequestDto) throws IOException {
         //중복체크
         Optional<Member> memberDb = memberRepository.getMemberByName(registerMemberRequestDto.getMemberName());
@@ -61,14 +64,38 @@ public class MemberServiceImpl implements MemberService {
         member.setMemberPassword(passwordEncoder.encode(registerMemberRequestDto.getMemberPassword()));
         member.setMemberNickName(registerMemberRequestDto.getMemberNickName());
 
-        member.setMemberThumbnailId(0);
-
         member.setMemberRole(CommonCodes.MEMBER_ROLE.ROLE_USER.CODE);
         member.setMemberStatus(CommonCodes.MEMBER_STATUS.MEMBER_STATUS_REGISTERED.CODE);
 
         memberRepository.insertMember(member);
 
-        //섬네일 파일 등록
-        fileService.registerThumbnailFile(registerMemberRequestDto.getMemberThumbnailFile(), member.getMemberId());
+        if(registerMemberRequestDto.getMemberThumbnailFile() != null) {
+            DbFile dbFile = fileService.registerFile(
+                    registerMemberRequestDto.getMemberThumbnailFile(),
+                    member.getMemberId(),
+                    CommonCodes.FILE_TYPE.FILE_TYPE_THUMBNAIL.CODE
+            );
+
+            member.setMemberThumbnailId(dbFile.getFileId());
+            memberRepository.updateMember(member);
+        }
+
+    }
+
+    @Override
+    public GetMemberInfoResponseDto getMemberByName(String memberName) {
+        Optional<Member> member = memberRepository.getMemberByName(memberName);
+
+        if(member.isPresent()) {
+            GetMemberInfoResponseDto getMemberInfoDto = new GetMemberInfoResponseDto();
+            getMemberInfoDto.setMemberId(member.get().getMemberId());
+            getMemberInfoDto.setMemberName(member.get().getMemberName());
+            getMemberInfoDto.setMemberNickName(member.get().getMemberNickName());
+            getMemberInfoDto.setMemberThumbnailFileUrl(member.get().getMemberThumbnailFile().getFileUrl());
+
+            return getMemberInfoDto;
+        }
+
+        return null;
     }
 }

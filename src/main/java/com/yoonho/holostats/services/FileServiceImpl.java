@@ -2,10 +2,9 @@ package com.yoonho.holostats.services;
 
 import com.yoonho.holostats.models.DbFile;
 import com.yoonho.holostats.repositories.FileRepository;
-import jakarta.servlet.http.HttpServletRequest;
+import com.yoonho.holostats.utils.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,8 +29,8 @@ import java.nio.file.Paths;
 @Service
 public class FileServiceImpl implements FileService{
 
-    @Value("${file.path}")
-    private String filePath;
+    @Value("${file.upload.base}")
+    private String fileBase;
 
     private final FileRepository fileRepository;
 
@@ -42,17 +41,34 @@ public class FileServiceImpl implements FileService{
     }
 
     @Override
-    public void registerThumbnailFile(MultipartFile multipartFile, Integer memberId) throws IOException {
-        String relSaveDir = filePath + File.separator + memberId;
-        File relFile = new File(relSaveDir);
+    public DbFile registerFile(MultipartFile multipartFile, Integer memberId, String fileType) throws IOException {
 
-        if(!relFile.exists()) {
-            relFile.mkdirs();
+        Path filePath = Paths.get("." + fileBase).toAbsolutePath().normalize();
+
+        String saveDir = filePath + File.separator + memberId;
+        String saveUrl = fileBase + File.separator + memberId;
+
+        String fileName = StringUtil.getRandomGeneratedString(8) + "." + StringUtil.getFileExtension(multipartFile.getOriginalFilename());
+
+        File saveDirFile = new File(saveDir);
+
+        if(!saveDirFile.exists()) {
+            saveDirFile.mkdirs();
         }
+
+        multipartFile.transferTo(new File(saveDir + File.separator + fileName));
 
         DbFile dbfile = new DbFile();
 
-        multipartFile.transferTo(new File(relSaveDir + File.separator + "11.jpeg"));
+        dbfile.setFileName(fileName);
+        dbfile.setFileType(fileType);
+        dbfile.setFilePath(saveDir + File.separator + fileName);
+        dbfile.setFileUrl(saveUrl + File.separator + fileName);
+        dbfile.setFileExt(StringUtil.getFileExtension(multipartFile.getOriginalFilename()));
+        dbfile.setFileSize(multipartFile.getSize());
 
+        fileRepository.insertFile(dbfile);
+
+        return dbfile;
     }
 }

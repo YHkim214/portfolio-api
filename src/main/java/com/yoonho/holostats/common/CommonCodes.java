@@ -29,6 +29,13 @@ public class CommonCodes {
             public static final String VAL = "901";
         }
     }
+    public static final class FILE_TYPE {
+        public static final class FILE_TYPE_THUMBNAIL {
+            public static final String CODE = "FILE_TYPE_THUMBNAIL";
+            public static final String DESC = "섬네일";
+            public static final String VAL = "null";
+        }
+    }
     public static final class MEMBER_ROLE {
         public static final class ROLE_USER {
             public static final String CODE = "ROLE_USER";

@@ -1,6 +1,11 @@
 package com.yoonho.holostats.controllers;
 
 import com.yoonho.holostats.common.CommonController;
+import com.yoonho.holostats.common.ResponseEntityWrapper;
+import com.yoonho.holostats.configs.security.JwtGenerator;
+import com.yoonho.holostats.dtos.response.GetMemberInfoResponseDto;
+import com.yoonho.holostats.services.MemberService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -18,5 +23,21 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/member")
 public class MemberController extends CommonController {
+
+    private final JwtGenerator jwtGenerator;
+    private final MemberService memberService;
+
+    public MemberController(JwtGenerator jwtGenerator, MemberService memberService) {
+        this.jwtGenerator = jwtGenerator;
+        this.memberService = memberService;
+    }
+
+    @GetMapping("/getMemberInfo")
+    public ResponseEntity getMemberInfo(@RequestHeader("Authorization") String accessToken) {
+        String userName = jwtGenerator.getUserName(accessToken.substring(7, accessToken.length()));
+        GetMemberInfoResponseDto getMemberInfoResponseDto = memberService.getMemberByName(userName);
+
+        return ResponseEntityWrapper.success(getMemberInfoResponseDto);
+    }
 
 }

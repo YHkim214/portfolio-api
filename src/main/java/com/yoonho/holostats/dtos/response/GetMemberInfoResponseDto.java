@@ -12,28 +12,26 @@
  *
  */
 
-package com.yoonho.holostats.repositories;
+package com.yoonho.holostats.dtos.response;
 
-import com.yoonho.holostats.models.DbFile;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-
+import lombok.Data;
 
 /**
- * packageName    : com.yoonho.holostats.repositories
- * fileName       : FileRepository
+ * packageName    : com.yoonho.holostats.dtos.response
+ * fileName       : GetMemberInfoDto
  * author         : kim-yoonho
- * date           : 1/4/24
+ * date           : 1/5/24
  * description    :
  * ===========================================================
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------
- * 1/4/24        kim-yoonho       최초 생성
+ * 1/5/24        kim-yoonho       최초 생성
  */
 
-@Mapper
-public interface FileRepository {
-
-    void insertFile(@Param("file") DbFile dbFile);
-
+@Data
+public class GetMemberInfoResponseDto {
+    private Integer memberId;
+    private String memberName;
+    private String memberNickName;
+    private String memberThumbnailFileUrl;
 }

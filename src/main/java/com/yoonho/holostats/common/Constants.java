@@ -13,6 +13,6 @@ package com.yoonho.holostats.common;
  */
 //TODO 밖으로 빼내기(보안이슈)
 public class Constants {
-    public static final long JWT_EXPIRATION = 3600L;
+    public static final long JWT_EXPIRATION = 36000000L;
     public static final String JWT_SECRET = "secret";
 }

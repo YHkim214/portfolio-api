@@ -4,14 +4,14 @@
 
 <mapper namespace="com.yoonho.holostats.repositories.MemberRepository">
 
-    <select id="getMemberById" resultType="com.yoonho.holostats.models.Member">
+    <select id="getMemberById" resultMap="memberResult">
         <include refid="member"/>
         WHERE 1=1
         AND
             MEMBER_ID = #{memberId}
     </select>
 
-    <select id="getMemberByName" resultType="com.yoonho.holostats.models.Member">
+    <select id="getMemberByName" resultMap="memberResult">
         <include refid="member"/>
         WHERE 1=1
           AND
@@ -20,17 +20,40 @@
 
     <sql id="member">
         SELECT
-            MEMBER_ID           AS memberID,
-            MEMBER_NAME         AS memberName,
-            MEMBER_NICKNAME     AS memberNickName,
-            MEMBER_PASSWORD     AS memberPassword,
-            MEMBER_THUMBNAIL_ID AS memberThumbnailId,
-            MEMBER_STATUS       AS memberStatus,
-            MEMBER_ROLE         AS memberRole,
-            CREATE_TIME         AS createTime,
-            UPDATE_TIME         AS updateTime
-        FROM TB_MEMBER
+            TM.MEMBER_ID           AS memberID,
+            TM.MEMBER_NAME         AS memberName,
+            TM.MEMBER_NICKNAME     AS memberNickName,
+            TM.MEMBER_PASSWORD     AS memberPassword,
+            TM.MEMBER_THUMBNAIL_ID AS memberThumbnailId,
+            TM.MEMBER_STATUS       AS memberStatus,
+            TM.MEMBER_ROLE         AS memberRole,
+            TM.CREATE_TIME         AS createTime,
+            TM.UPDATE_TIME         AS updateTime,
+
+            TF.FILE_ID             AS t_fileId,
+            TF.FILE_URL            AS t_fileUrl
+        FROM TB_MEMBER          AS TM
+        LEFT JOIN TB_FILE TF
+        ON TM.MEMBER_THUMBNAIL_ID = TF.FILE_ID
     </sql>
+
+    <resultMap id="memberResult" type="com.yoonho.holostats.models.Member">
+        <id property="memberId" column="memberId"/>
+        <result property="memberName" column="memberName"/>
+        <result property="memberNickName" column="memberNickName"/>
+        <result property="memberPassword" column="memberPassword"/>
+        <result property="memberThumbnailId" column="memberThumbnailId"/>
+        <result property="memberStatus" column="memberStatus"/>
+        <result property="memberRole" column="memberRole"/>
+        <result property="createTime" column="createTime"/>
+        <result property="updateTime" column="updateTime"/>
+        <association property="memberThumbnailFile" column="t_fileId" javaType="com.yoonho.holostats.models.DbFile" resultMap="fileResult"/>
+    </resultMap>
+
+    <resultMap id="fileResult" type="com.yoonho.holostats.models.DbFile">
+        <id property="fileId" column="t_fileId"/>
+        <result property="fileUrl" column="t_fileUrl"/>
+    </resultMap>
 
     <insert id="insertMember" useGeneratedKeys="true" keyProperty="memberId" parameterType="com.yoonho.holostats.models.Member">
         INSERT INTO TB_MEMBER(
@@ -50,4 +73,16 @@
             #{member.memberRole}
         )
     </insert>
+
+    <update id="updateMember" parameterType="com.yoonho.holostats.models.Member">
+        UPDATE TB_MEMBER
+        SET
+            MEMBER_THUMBNAIL_ID = #{member.memberThumbnailId},
+            MEMBER_NICKNAME = #{member.memberNickName},
+            MEMBER_STATUS = #{member.memberStatus},
+            MEMBER_PASSWORD = #{member.memberPassword},
+            UPDATE_TIME = CURRENT_TIMESTAMP
+        WHERE
+            MEMBER_ID = #{member.memberId}
+    </update>
 </mapper>

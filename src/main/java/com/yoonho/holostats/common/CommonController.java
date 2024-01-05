@@ -29,4 +29,9 @@ public class CommonController {
         return ResponseEntityWrapper.fail(999, badCredentialsException.getMessage());
     }
 
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity handleBadCredentialsException(Exception exception) {
+        return ResponseEntityWrapper.fail(999, exception.getMessage());
+    }
+
 }
