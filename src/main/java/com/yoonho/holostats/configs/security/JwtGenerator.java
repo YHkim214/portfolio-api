@@ -1,13 +1,18 @@
 package com.yoonho.holostats.configs.security;
 
-import com.yoonho.holostats.common.Constants;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import net.sf.jsqlparser.statement.select.KSQLWindow;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 /**
@@ -23,38 +28,41 @@ import java.util.Date;
  */
 @Component
 public class JwtGenerator {
+
+    @Value("${jwt.secret-key}")
+    private String secretKey;
+
+    @Value("${jwt.access-token.expiration-minutes}")
+    private Integer accessTokenExpMin;
+
+    @Value("${jwt.refresh-token.expiration-hours}")
+    private Integer refreshTokenExpHours;
+
     public String generateToken(Authentication authentication) {
         String userName = authentication.getName();
-        Date curDate = new Date();
-        Date expDate = new Date(curDate.getTime() + Constants.JWT_ACCESS_EXPIRATION);
 
         return Jwts
             .builder()
             .setSubject(userName)
-            .setIssuedAt(curDate)
-            .setExpiration(expDate)
-            .signWith(SignatureAlgorithm.HS512, Constants.JWT_ACCESS_SECRET)
+            .setIssuedAt(Timestamp.valueOf(LocalDateTime.now()))
+            .setExpiration(Date.from(Instant.now().plus(accessTokenExpMin, ChronoUnit.MINUTES)))
+            .signWith(SignatureAlgorithm.HS512, secretKey)
             .compact();
     }
 
-    public String generateRefreshToken(Authentication authentication) {
-        String userName = authentication.getName();
-        Date curDate = new Date();
-        Date expDate = new Date(curDate.getTime() + Constants.JWT_REFRESH_EXPIRATION);
-
+    public String generateRefreshToken() {
         return Jwts
                 .builder()
-                .setSubject(userName)
-                .setIssuedAt(curDate)
-                .setExpiration(expDate)
-                .signWith(SignatureAlgorithm.HS512, Constants.JWT_REFRESH_SECRET)
+                .setIssuedAt(Timestamp.valueOf(LocalDateTime.now()))
+                .setExpiration(Date.from(Instant.now().plus(refreshTokenExpHours, ChronoUnit.HOURS)))
+                .signWith(SignatureAlgorithm.HS512, secretKey)
                 .compact();
     }
 
     public String getUserName(String token) {
         Claims claims = Jwts
                 .parser()
-                .setSigningKey(Constants.JWT_ACCESS_SECRET)
+                .setSigningKey(secretKey)
                 .parseClaimsJws(token)
                 .getBody();
         String result = claims.getSubject();
@@ -65,7 +73,7 @@ public class JwtGenerator {
         try {
             Jwts
                 .parser()
-                .setSigningKey(Constants.JWT_ACCESS_SECRET)
+                .setSigningKey(secretKey)
                 .parseClaimsJws(token);
             return true;
         } catch (Exception e) {
