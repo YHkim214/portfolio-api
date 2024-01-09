@@ -26,21 +26,35 @@ public class JwtGenerator {
     public String generateToken(Authentication authentication) {
         String userName = authentication.getName();
         Date curDate = new Date();
-        Date expDate = new Date(curDate.getTime() + Constants.JWT_EXPIRATION);
+        Date expDate = new Date(curDate.getTime() + Constants.JWT_ACCESS_EXPIRATION);
 
         return Jwts
             .builder()
             .setSubject(userName)
             .setIssuedAt(curDate)
             .setExpiration(expDate)
-            .signWith(SignatureAlgorithm.HS512, Constants.JWT_SECRET)
+            .signWith(SignatureAlgorithm.HS512, Constants.JWT_ACCESS_SECRET)
             .compact();
+    }
+
+    public String generateRefreshToken(Authentication authentication) {
+        String userName = authentication.getName();
+        Date curDate = new Date();
+        Date expDate = new Date(curDate.getTime() + Constants.JWT_REFRESH_EXPIRATION);
+
+        return Jwts
+                .builder()
+                .setSubject(userName)
+                .setIssuedAt(curDate)
+                .setExpiration(expDate)
+                .signWith(SignatureAlgorithm.HS512, Constants.JWT_REFRESH_SECRET)
+                .compact();
     }
 
     public String getUserName(String token) {
         Claims claims = Jwts
                 .parser()
-                .setSigningKey(Constants.JWT_SECRET)
+                .setSigningKey(Constants.JWT_ACCESS_SECRET)
                 .parseClaimsJws(token)
                 .getBody();
         String result = claims.getSubject();
@@ -51,7 +65,7 @@ public class JwtGenerator {
         try {
             Jwts
                 .parser()
-                .setSigningKey(Constants.JWT_SECRET)
+                .setSigningKey(Constants.JWT_ACCESS_SECRET)
                 .parseClaimsJws(token);
             return true;
         } catch (Exception e) {
