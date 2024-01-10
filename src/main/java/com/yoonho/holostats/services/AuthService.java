@@ -1,5 +1,6 @@
 package com.yoonho.holostats.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yoonho.holostats.dtos.request.LoginRequestDto;
 import com.yoonho.holostats.dtos.response.LoginResponseDto;
 
@@ -17,5 +18,6 @@ import com.yoonho.holostats.dtos.response.LoginResponseDto;
 public interface AuthService {
 
     LoginResponseDto login(LoginRequestDto loginRequestDto);
+    String refresh(String oldAccessToken, String refreshToken) throws JsonProcessingException;
 
 }

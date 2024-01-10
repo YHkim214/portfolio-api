@@ -1,10 +1,13 @@
 package com.yoonho.holostats.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yoonho.holostats.common.CommonController;
 import com.yoonho.holostats.common.ResponseEntityWrapper;
 import com.yoonho.holostats.dtos.request.LoginRequestDto;
+import com.yoonho.holostats.dtos.request.RefreshRequestDto;
 import com.yoonho.holostats.dtos.request.RegisterMemberRequestDto;
 import com.yoonho.holostats.dtos.response.LoginResponseDto;
+import com.yoonho.holostats.dtos.response.RefreshResponseDto;
 import com.yoonho.holostats.services.AuthService;
 import com.yoonho.holostats.services.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -53,5 +56,13 @@ public class AuthController extends CommonController {
         LoginResponseDto loginResponseDto = authService.login(loginRequestDto);
 
         return ResponseEntityWrapper.success(loginResponseDto);
+    }
+
+    @PostMapping("/refresh")
+    @ResponseBody
+    public ResponseEntity refresh(@RequestBody RefreshRequestDto refreshRequestDto) throws JsonProcessingException {
+        String newAccessToken = authService.refresh(refreshRequestDto.getOldAccessToken(), refreshRequestDto.getRefreshToken());
+
+        return ResponseEntityWrapper.success(new RefreshResponseDto(newAccessToken));
     }
 }

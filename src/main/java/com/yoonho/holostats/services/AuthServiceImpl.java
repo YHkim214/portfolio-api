@@ -1,5 +1,6 @@
 package com.yoonho.holostats.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yoonho.holostats.configs.security.JwtGenerator;
 import com.yoonho.holostats.dtos.request.LoginRequestDto;
 import com.yoonho.holostats.dtos.response.LoginResponseDto;
@@ -8,6 +9,7 @@ import com.yoonho.holostats.models.Member;
 import com.yoonho.holostats.models.RefreshToken;
 import com.yoonho.holostats.repositories.MemberRepository;
 import com.yoonho.holostats.repositories.RefreshTokenRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -26,6 +28,7 @@ import org.springframework.stereotype.Service;
  * 12/27/23        kim-yoonho       최초 생성
  */
 @Service
+@Slf4j
 public class AuthServiceImpl implements AuthService{
 
     private final AuthenticationManager authenticationManager;
@@ -64,4 +67,11 @@ public class AuthServiceImpl implements AuthService{
         return new LoginResponseDto(token, refreshToken);
     }
 
+    @Override
+    public String refresh(String oldAccessToken, String refreshToken) throws JsonProcessingException {
+        jwtGenerator.validateRefreshToken(refreshToken, oldAccessToken);
+        String newAccessToken = jwtGenerator.recreateAccessToken(oldAccessToken);
+
+        return newAccessToken;
+    }
 }

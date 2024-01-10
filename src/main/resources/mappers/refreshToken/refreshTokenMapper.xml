@@ -2,7 +2,7 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.yoonho.holostats.repositories.refreshTokenRepository">
+<mapper namespace="com.yoonho.holostats.repositories.RefreshTokenRepository">
     <insert id="insertRefreshToken" parameterType="com.yoonho.holostats.models.RefreshToken">
         INSERT INTO TB_REFRESH_TOKEN (
             REFRESH_TOKEN_ID,
@@ -15,14 +15,14 @@
         )
     </insert>
 
-    <select id="getRefreshTokenByMemberId" parameterType="integer" resultType="com.yoonho.holostats.models.RefreshToken">
+    <select id="getRefreshTokenByMemberId" resultType="com.yoonho.holostats.models.RefreshToken">
         SELECT
-            REFRESH_TOKEN_ID    AS refreshTokenId,
-            REFRESH_TOKEN       AS refreshToken,
-            MEMBER_ID           AS memberID
+            `REFRESH_TOKEN_ID`    AS `refreshTokenId`,
+            `REFRESH_TOKEN`       AS `refreshToken`,
+            `MEMBER_ID`           AS `memberId`
         FROM TB_REFRESH_TOKEN
         WHERE 1=1
-        AND MEMBER_ID = #{memberId}
+        AND `MEMBER_ID` = #{memberId}
         </select>
 
     <update id="updateRefreshToken" parameterType="com.yoonho.holostats.models.RefreshToken">

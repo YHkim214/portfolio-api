@@ -12,32 +12,23 @@
  *
  */
 
-package com.yoonho.holostats.models;
+package com.yoonho.holostats.dtos.request;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
- * packageName    : com.yoonho.holostats.models
- * fileName       : RefreshToken
+ * packageName    : com.yoonho.holostats.dtos.request
+ * fileName       : RefreshRequestDto
  * author         : kim-yoonho
- * date           : 1/9/24
+ * date           : 1/10/24
  * description    :
  * ===========================================================
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------
- * 1/9/24        kim-yoonho       최초 생성
+ * 1/10/24        kim-yoonho       최초 생성
  */
-
 @Data
-@AllArgsConstructor
-public class RefreshToken {
-    private Integer refreshTokenId;
+public class RefreshRequestDto {
+    private String oldAccessToken;
     private String refreshToken;
-    private Integer memberId;
-
-    public RefreshToken(String refreshToken, Integer memberId) {
-        this.refreshToken = refreshToken;
-        this.memberId = memberId;
-    }
 }
