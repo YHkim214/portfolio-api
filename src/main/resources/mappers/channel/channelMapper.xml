@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yoonho.holostats.repositories.ChannelRepository">
+
+    <insert id="upsertChannels">
+        INSERT INTO TB_CHANNEL(CHANNEL_NAME, CHANNEL_YT_ID, CHANNEL_STATUS) VALUES
+        <foreach collection="channels" item="channel" separator=",">
+        (#{channel.channelName}, #{channel.channelYtId}, #{channel.channelStatus})
+        </foreach>
+        ON DUPLICATE KEY UPDATE CHANNEL_YT_ID = VALUES(CHANNEL_YT_ID), CHANNEL_STATUS = VALUES(CHANNEL_STATUS), UPDATE_TIME = CURRENT_TIMESTAMP
+    </insert>
+
+</mapper>

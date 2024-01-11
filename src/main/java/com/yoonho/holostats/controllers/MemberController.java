@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
  */
 
 @RestController
-@RequestMapping("/member")
+@RequestMapping("/api/member")
 public class MemberController extends CommonController {
 
     private final JwtGenerator jwtGenerator;

@@ -12,6 +12,13 @@ package com.yoonho.holostats.common;
  * 12/27/23        kim-yoonho       최초 생성
  */
 public class CommonCodes {
+    public static final class CHANNEL_STATUS {
+        public static final class CHANNEL_STATUS_ACTIVE {
+            public static final String CODE = "CHANNEL_STATUS_ACTIVE";
+            public static final String DESC = "활성화된 채널";
+            public static final String VAL = "null";
+        }
+    }
     public static final class ERROR_CODE {
         public static final class ERROR_CODE_API {
             public static final String CODE = "ERROR_CODE_API";
