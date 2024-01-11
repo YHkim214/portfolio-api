@@ -101,13 +101,12 @@ public class JwtGenerator {
         return result;
     }
 
-    public boolean validateToken(String token) {
+    public void validateToken(String token) {
         try {
             Jwts
                 .parser()
                 .setSigningKey(secretKey)
                 .parseClaimsJws(token);
-            return true;
         } catch (Exception e) {
             throw new AuthenticationCredentialsNotFoundException("JWT토큰이 만료되었거나, 유효하지 않습니다.");
         }

@@ -1,9 +1,11 @@
 package com.yoonho.holostats.configs.security;
 
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,6 +30,7 @@ import java.util.Optional;
  * 12/28/23        kim-yoonho       최초 생성
  */
 @Component
+@Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Autowired
@@ -41,15 +44,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
         Optional<String> token = getJwtFromRequest(request, "Authorization");
+        try {
+            if(token.isPresent()) {
+                jwtGenerator.validateToken(token.get());
+                String userName = jwtGenerator.getUserName(token.get());
 
-        if(token.isPresent() && jwtGenerator.validateToken(token.get())) {
-            String userName = jwtGenerator.getUserName(token.get());
-
-            UserDetails userDetails = customUserDetailsService.loadUserByUsername(userName);
-            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                    new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-            usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                UserDetails userDetails = customUserDetailsService.loadUserByUsername(userName);
+                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+            } else {
+                throw new JwtException("jwt 토큰이 존재하지 않습니다.");
+            }
+        } catch (JwtException e) {
+            log.info("jwt authentication failed");
         }
 
         filterChain.doFilter(request, response);
