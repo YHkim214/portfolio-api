@@ -36,4 +36,6 @@ build/
 uploads/
 
 ### configs ###
-application-local.properties
+**/application.properties
+**/application-dev.properties
+**/application-local.properties
