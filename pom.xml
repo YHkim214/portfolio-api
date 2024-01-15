@@ -82,6 +82,19 @@
             <version>1.17.2</version>
         </dependency>
 
+        <!-- 구글 api client -->
+        <dependency>
+            <groupId>com.google.api-client</groupId>
+            <artifactId>google-api-client</artifactId>
+            <version>1.33.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.apis</groupId>
+            <artifactId>google-api-services-youtube</artifactId>
+            <version>v3-rev20231011-2.0.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>
