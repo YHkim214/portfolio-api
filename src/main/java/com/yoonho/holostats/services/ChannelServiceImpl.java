@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -51,12 +52,14 @@ public class ChannelServiceImpl implements ChannelService{
 
     private final ChannelRepository channelRepository;
 
-    public ChannelServiceImpl(ChannelRepository channelRepository) {
+    private final YoutubeService youtubeService;
+
+    public ChannelServiceImpl(ChannelRepository channelRepository, YoutubeService youtubeService) {
         this.channelRepository = channelRepository;
+        this.youtubeService = youtubeService;
     }
 
     public List<Channel> getChannels() throws IOException {
-
         Document document = Jsoup.connect(crawlerBase).get();
         Elements talentElements = document.getElementsByClass("talent_list").get(0).select("li");
 
@@ -64,16 +67,19 @@ public class ChannelServiceImpl implements ChannelService{
             talent.select("h3 span").remove();
             String channelName = talent.select("h3").text();
             String ytId = "";
+            String uploadId = "";
 
-            log.info("crawling start => {}", channelName);
+            log.info("crawling start for => {}", channelName);
             try {
-                ytId = getYtId(talent);
+                ytId = getYtId(talent).orElseThrow();
+                uploadId = youtubeService.getUploadId(ytId).orElseThrow();
             } catch (Exception e) {
-                log.info("retreiving ytId failed: {}", channelName);
+                log.info("retreiving ytId for {} failed", channelName);
             }
-            log.info("crawling finished => {}", channelName);
 
-            return new Channel(channelName, ytId, CommonCodes.CHANNEL_STATUS.CHANNEL_STATUS_ACTIVE.CODE);
+            log.info("crawling for {} finished", channelName);
+
+            return new Channel(channelName, ytId, uploadId, CommonCodes.CHANNEL_STATUS.CHANNEL_STATUS_ACTIVE.CODE);
 
         }).collect(Collectors.toList());
 
@@ -84,7 +90,8 @@ public class ChannelServiceImpl implements ChannelService{
         channelRepository.upsertChannels(channels);
     }
 
-    public String getYtId(Element element) throws IOException, InterruptedException {
+    public Optional<String> getYtId(Element element) throws IOException, InterruptedException {
+        //크롤링을 위한 딜레이
         Thread.sleep(1000);
         String url = element.select("a").attr("href");
         String ytUrl= Jsoup.connect(url)
@@ -95,6 +102,8 @@ public class ChannelServiceImpl implements ChannelService{
                 .selectFirst("a")
                 .attr("href");
 
-        return ytUrl.substring(ytUrl.lastIndexOf("/") + 1, ytUrl.lastIndexOf("?") > 0 ? ytUrl.lastIndexOf("?") : ytUrl.length());
+        String ytId = ytUrl.substring(ytUrl.lastIndexOf("/") + 1, ytUrl.lastIndexOf("?") > 0 ? ytUrl.lastIndexOf("?") : ytUrl.length());
+
+        return Optional.ofNullable(ytId);
     }
 }

@@ -41,7 +41,8 @@ public class YoutubeServiceTest {
 
     @Test
     void test() throws IOException {
-        youtubeService.getActivityList("UC1DCedRgGHBdm81E1llLhOQ");
+        System.out.println(youtubeService.getVideoInfo(youtubeService.getRecentVideoIds("UU1DCedRgGHBdm81E1llLhOQ")));
     }
 
 }
+

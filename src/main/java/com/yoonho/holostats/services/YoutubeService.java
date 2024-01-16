@@ -14,7 +14,11 @@
 
 package com.yoonho.holostats.services;
 
+import com.google.api.services.youtube.model.Video;
+
 import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * packageName    : com.yoonho.holostats.services
@@ -29,6 +33,10 @@ import java.io.IOException;
  */
 public interface YoutubeService {
 
-    void getActivityList(String channelId) throws IOException;
+    List<Video> getVideoInfo(List<String> videoIds) throws IOException;
+
+    List<String> getRecentVideoIds(String uploadId) throws IOException;
+
+    Optional<String> getUploadId(String channelId) throws IOException;
 
 }
