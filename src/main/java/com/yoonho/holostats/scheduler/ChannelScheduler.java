@@ -15,7 +15,7 @@
 package com.yoonho.holostats.scheduler;
 
 import com.yoonho.holostats.models.Channel;
-import com.yoonho.holostats.services.ChannelService;
+import com.yoonho.holostats.services.channel.ChannelService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;

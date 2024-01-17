@@ -1,4 +1,18 @@
-package com.yoonho.holostats.services;
+/*
+ * *
+ *  *packageName    : ${PACKAGE_NAME}
+ *  * fileName       : ${NAME}
+ *  * author         : ${USER}
+ *  * date           : ${DATE}
+ *  * description    :
+ *  * ===========================================================
+ *  * DATE              AUTHOR             NOTE
+ *  * -----------------------------------------------------------
+ *  * ${DATE}        ${USER}       최초 생성
+ *
+ */
+
+package com.yoonho.holostats.services.member;
 
 import com.yoonho.holostats.dtos.request.RegisterMemberRequestDto;
 import com.yoonho.holostats.dtos.response.GetMemberInfoResponseDto;

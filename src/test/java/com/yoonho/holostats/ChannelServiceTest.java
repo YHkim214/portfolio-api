@@ -14,14 +14,14 @@
 
 package com.yoonho.holostats;
 
-import com.yoonho.holostats.models.Channel;
-import com.yoonho.holostats.services.ChannelService;
+import com.yoonho.holostats.common.CommonCodes;
+import com.yoonho.holostats.repositories.ChannelRepository;
+import com.yoonho.holostats.services.channel.ChannelService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  * packageName    : com.yoonho.holostats
@@ -40,9 +40,13 @@ public class ChannelServiceTest {
     @Autowired
     private ChannelService channelService;
 
+    @Autowired
+    private ChannelRepository channelRepository;
+
     @Test
     void test() throws IOException {
-        channelService.insertChannels(channelService.getChannels());
+//        channelService.insertChannels(channelService.getChannels());
+        System.out.println(channelRepository.getChannelListByStatus(CommonCodes.CHANNEL_STATUS.ACTIVE.CODE));
     }
 
 }

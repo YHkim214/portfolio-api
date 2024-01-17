@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yoonho.holostats.repositories.liveStream.LiveStreamRepository">
+    <insert id="insertLiveStream" parameterType="com.yoonho.holostats.models.liveStream.LiveStream">
+        INSERT INTO TB_LS (
+                           LS_ID,
+                           CHANNEL_ID,
+                           LS_NAME,
+                           LS_YT_ID,
+                           START_TIME,
+                           END_TIME,
+                           MAX_VIEWER,
+                           AVG_VIEWER,
+                           GOOD_CNT,
+                           LS_STATUS
+        )
+        VALUES (
+                    #{liveStream.lsId},
+                    #{liveStream.channelId},
+                    #{liveStream.lsName},
+                    #{liveStream.lsYtId},
+                    #{liveStream.startTime},
+                    #{liveStream.endTime},
+                    #{liveStream.maxViewer},
+                    #{liveStream.avgViewer},
+                    #{liveStream.goodCnt},
+                    #{liveStream.lsStatus}
+               )
+        ON DUPLICATE KEY UPDATE LS_STATUS = VALUES(LS_STATUS),
+                                START_TIME = VALUES(START_TIME),
+                                UPDATE_TIME = CURRENT_TIMESTAMP
+    </insert>
+
+    <select id="getLiveStreamByStatus" resultType="com.yoonho.holostats.models.liveStream.LiveStream">
+        SELECT
+            LS_ID           AS lsId,
+            CHANNEL_ID      AS channelId,
+            LS_NAME         AS laName,
+            LS_YT_ID        AS LSYtId,
+            START_TIME      AS startTime,
+            END_TIME        AS endTime,
+            MAX_VIEWER      AS maxViewer,
+            AVG_VIEWER      AS avgViewer,
+            GOOD_CNT        AS goodCnt,
+            LS_STATUS       AS lsStatus,
+            CREATE_TIME     AS createTime,
+            UPDATE_TIME     AS updateTime
+        FROM
+            TB_LS
+        WHERE 1=1
+        AND
+            LS_STATUS = #{lsStatus}
+    </select>
+
+    <select id="getLiveStreamByYtId" resultType="com.yoonho.holostats.models.liveStream.LiveStream">
+        SELECT
+            LS_ID           AS lsId,
+            CHANNEL_ID      AS channelId,
+            LS_NAME         AS laName,
+            LS_YT_ID        AS LSYtId,
+            START_TIME      AS startTime,
+            END_TIME        AS endTime,
+            MAX_VIEWER      AS maxViewer,
+            AVG_VIEWER      AS avgViewer,
+            GOOD_CNT        AS goodCnt,
+            LS_STATUS       AS lsStatus,
+            CREATE_TIME     AS createTime,
+            UPDATE_TIME     AS updateTime
+        FROM
+            TB_LS
+        WHERE 1=1
+          AND
+            LS_YT_ID = #{lsYtId}
+    </select>
+</mapper>

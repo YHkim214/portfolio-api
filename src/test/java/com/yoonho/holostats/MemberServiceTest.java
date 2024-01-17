@@ -1,7 +1,6 @@
 package com.yoonho.holostats;
 
-import com.yoonho.holostats.dtos.request.RegisterMemberRequestDto;
-import com.yoonho.holostats.services.MemberService;
+import com.yoonho.holostats.services.member.MemberService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -17,7 +17,7 @@ public class ResponseEntityWrapper {
 
     public static <T> ResponseEntity<ResponseBody<T>> success(T data) {
         return ResponseEntity
-                .ok(new ResponseBody<T>(data, CommonCodes.ERROR_CODE.ERROR_CODE_NONE.VAL, CommonCodes.ERROR_CODE.ERROR_CODE_NONE.DESC));
+                .ok(new ResponseBody<T>(data, CommonCodes.ERROR_CODE.NONE.VAL, CommonCodes.ERROR_CODE.NONE.DESC));
     }
 
     public static ResponseEntity fail(Integer code, String message) {

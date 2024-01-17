@@ -12,12 +12,26 @@
  *
  */
 
-package com.yoonho.holostats.services;
+/*
+ * *
+ *  *packageName    : ${PACKAGE_NAME}
+ *  * fileName       : ${NAME}
+ *  * author         : ${USER}
+ *  * date           : ${DATE}
+ *  * description    :
+ *  * ===========================================================
+ *  * DATE              AUTHOR             NOTE
+ *  * -----------------------------------------------------------
+ *  * ${DATE}        ${USER}       최초 생성
+ *
+ */
+
+package com.yoonho.holostats.services.channel;
 
 import com.yoonho.holostats.common.CommonCodes;
 import com.yoonho.holostats.models.Channel;
-import com.yoonho.holostats.models.CommonCode;
 import com.yoonho.holostats.repositories.ChannelRepository;
+import com.yoonho.holostats.services.youtube.YoutubeService;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -79,7 +93,7 @@ public class ChannelServiceImpl implements ChannelService{
 
             log.info("crawling for {} finished", channelName);
 
-            return new Channel(channelName, ytId, uploadId, CommonCodes.CHANNEL_STATUS.CHANNEL_STATUS_ACTIVE.CODE);
+            return new Channel(channelName, ytId, uploadId, CommonCodes.CHANNEL_STATUS.ACTIVE.CODE);
 
         }).collect(Collectors.toList());
 

@@ -4,7 +4,7 @@ import com.yoonho.holostats.common.CommonController;
 import com.yoonho.holostats.common.ResponseEntityWrapper;
 import com.yoonho.holostats.configs.security.JwtGenerator;
 import com.yoonho.holostats.dtos.response.GetMemberInfoResponseDto;
-import com.yoonho.holostats.services.MemberService;
+import com.yoonho.holostats.services.member.MemberService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

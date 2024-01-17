@@ -17,6 +17,9 @@ package com.yoonho.holostats.models;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.sql.Time;
+import java.sql.Timestamp;
+
 /**
  * packageName    : com.yoonho.holostats.models
  * fileName       : Channel
@@ -36,6 +39,8 @@ public class Channel {
     private String channelYtId;     //유튜브 채널 아이디
     private String channelUploadId; //유튜브 채널 업로드 재생목록 아이디
     private String channelStatus;   //채널 상태
+    private Timestamp createTime;
+    private Timestamp updateTime;
 
     public Channel(String channelName, String channelYtId, String channelUploadId, String channelStatus) {
         this.channelName = channelName;

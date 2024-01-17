@@ -12,27 +12,33 @@
  *
  */
 
-package com.yoonho.holostats.repositories;
+package com.yoonho.holostats;
 
-import com.yoonho.holostats.models.Channel;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-
-import java.util.List;
+import com.yoonho.holostats.services.liveStream.LiveStreamService;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 /**
- * packageName    : com.yoonho.holostats.repositories
- * fileName       : ChannelRepository
+ * packageName    : com.yoonho.holostats
+ * fileName       : LiveStreamServiceTest
  * author         : kim-yoonho
- * date           : 1/11/24
+ * date           : 1/17/24
  * description    :
  * ===========================================================
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------
- * 1/11/24        kim-yoonho       최초 생성
+ * 1/17/24        kim-yoonho       최초 생성
  */
-@Mapper
-public interface ChannelRepository {
-    void upsertChannels(@Param("channels") List<Channel> channels);
-    List<Channel> getChannelListByStatus(@Param("channelStatus") String channelStatus);
+@SpringBootTest
+public class LiveStreamServiceTest {
+
+    @Autowired
+    private LiveStreamService liveStreamService;
+
+    @Test
+    void test() {
+        liveStreamService.getLiveStreamFromYoutube();
+    }
+
 }

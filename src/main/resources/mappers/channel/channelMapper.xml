@@ -15,4 +15,20 @@
                                 UPDATE_TIME = CURRENT_TIMESTAMP
     </insert>
 
+    <select id="getChannelListByStatus" resultType="com.yoonho.holostats.models.Channel">
+        SELECT
+            CHANNEL_ID          AS channelId,
+            CHANNEL_NAME        AS channelName,
+            CHANNEL_YT_ID       AS channelYtId,
+            CHANNEL_UPLOAD_ID   AS channelUploadId,
+            CHANNEL_STATUS      AS channelStatus,
+            CREATE_TIME         AS createTime,
+            UPDATE_TIME         AS updateTime
+        FROM
+            TB_CHANNEL
+        WHERE 1=1
+        AND
+            CHANNEL_STATUS = #{channelStatus}
+    </select>
+
 </mapper>

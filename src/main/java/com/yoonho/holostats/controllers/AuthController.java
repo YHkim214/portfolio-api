@@ -8,9 +8,8 @@ import com.yoonho.holostats.dtos.request.RefreshRequestDto;
 import com.yoonho.holostats.dtos.request.RegisterMemberRequestDto;
 import com.yoonho.holostats.dtos.response.LoginResponseDto;
 import com.yoonho.holostats.dtos.response.RefreshResponseDto;
-import com.yoonho.holostats.services.AuthService;
-import com.yoonho.holostats.services.MemberService;
-import jakarta.servlet.http.HttpServletRequest;
+import com.yoonho.holostats.services.auth.AuthService;
+import com.yoonho.holostats.services.member.MemberService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

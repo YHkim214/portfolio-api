@@ -12,27 +12,22 @@
  *
  */
 
-package com.yoonho.holostats.repositories;
+package com.yoonho.holostats.services.liveStream;
 
-import com.yoonho.holostats.models.Channel;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-
-import java.util.List;
+import java.io.IOException;
 
 /**
- * packageName    : com.yoonho.holostats.repositories
- * fileName       : ChannelRepository
+ * packageName    : com.yoonho.holostats.services.ls
+ * fileName       : LSService
  * author         : kim-yoonho
- * date           : 1/11/24
+ * date           : 1/17/24
  * description    :
  * ===========================================================
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------
- * 1/11/24        kim-yoonho       최초 생성
+ * 1/17/24        kim-yoonho       최초 생성
  */
-@Mapper
-public interface ChannelRepository {
-    void upsertChannels(@Param("channels") List<Channel> channels);
-    List<Channel> getChannelListByStatus(@Param("channelStatus") String channelStatus);
+public interface LiveStreamService {
+    void getLiveStreamFromYoutube();
+    void updateLiveStreamFromYoutube() throws IOException;
 }

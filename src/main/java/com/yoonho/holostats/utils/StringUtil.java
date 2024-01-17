@@ -57,4 +57,8 @@ public class StringUtil {
         return generatedString;
     }
 
+    public static boolean isNullOrEmpty(String string) {
+        return string == null || string.isEmpty() || string.isBlank();
+    }
+
 }

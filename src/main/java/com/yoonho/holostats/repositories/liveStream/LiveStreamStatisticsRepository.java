@@ -12,31 +12,24 @@
  *
  */
 
-package com.yoonho.holostats.services;
+package com.yoonho.holostats.repositories.liveStream;
 
-import com.google.api.services.youtube.model.Video;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
+import com.yoonho.holostats.models.liveStream.LiveStreamStatistics;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
- * packageName    : com.yoonho.holostats.services
- * fileName       : YoutubeService
+ * packageName    : com.yoonho.holostats.repositories.liveStream
+ * fileName       : LiveStreamStatisticsRepository
  * author         : kim-yoonho
- * date           : 1/15/24
+ * date           : 1/17/24
  * description    :
  * ===========================================================
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------
- * 1/15/24        kim-yoonho       최초 생성
+ * 1/17/24        kim-yoonho       최초 생성
  */
-public interface YoutubeService {
-
-    List<Video> getVideoInfo(List<String> videoIds) throws IOException;
-
-    List<String> getRecentVideoIds(String uploadId) throws IOException;
-
-    Optional<String> getUploadId(String channelId) throws IOException;
-
+@Mapper
+public interface LiveStreamStatisticsRepository {
+    void insertLiveStreamStatistics(@Param("liveStreamStatistics") LiveStreamStatistics liveStreamStatistics);
 }
