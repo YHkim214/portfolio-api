@@ -45,7 +45,7 @@ public class ChannelScheduler {
         this.channelService = channelService;
     }
 
-    @Scheduled(initialDelay = 1000 * 5, fixedDelay=Long.MAX_VALUE)
+//    @Scheduled(initialDelay = 1000 * 5, fixedDelay=Long.MAX_VALUE)
     public void getAndInsertChannel() throws IOException {
         log.info("===================================Crawling started!");
         List<Channel> channels = channelService.getChannels();

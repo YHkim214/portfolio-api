@@ -58,4 +58,11 @@ public class LiveStream {
     private String lsStatus;        /** 라이브 스트리밍 상태 값 **/
     private Timestamp createTime;   /** 생성시각 **/
     private Timestamp updateTime;   /** 수정시각 **/
+
+    private final long ONE_MINUTE = 60000L;
+
+    public boolean isAboutToStart() {
+        Timestamp curTimestamp = new Timestamp(System.currentTimeMillis() + ONE_MINUTE);
+        return curTimestamp.after(this.startTime);
+    }
 }

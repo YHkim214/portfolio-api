@@ -18,6 +18,8 @@ import com.yoonho.holostats.models.liveStream.LiveStreamStatistics;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Optional;
+
 /**
  * packageName    : com.yoonho.holostats.repositories.liveStream
  * fileName       : LiveStreamStatisticsRepository
@@ -32,4 +34,5 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface LiveStreamStatisticsRepository {
     void insertLiveStreamStatistics(@Param("liveStreamStatistics") LiveStreamStatistics liveStreamStatistics);
+    Optional<Integer> getAvgViewer(@Param("lsId") Integer lsId);
 }

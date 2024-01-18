@@ -13,4 +13,11 @@
                 #{liveStreamStatistics.concurrentViewer}
                )
     </insert>
+
+    <select id="getAvgViewer" resultType="Integer">
+        SELECT AVG(CONCURRENT_VIEWER)
+        FROM TB_LS_STATISTICS
+        GROUP BY LS_ID
+        HAVING LS_ID = #{lsId}
+    </select>
 </mapper>

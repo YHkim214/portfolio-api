@@ -32,7 +32,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.List;
+import java.util.*;
 
 /**
  * packageName    : com.yoonho.holostats.services.ls
@@ -59,6 +59,7 @@ public class LiveStreamServiceImpl implements LiveStreamService {
 
     private final String UPCOMING = "upcoming";
     private final String LIVE = "live";
+    private final String NONE = "none";
 
     public LiveStreamServiceImpl(YoutubeService youtubeService, ChannelRepository channelRepository, LiveStreamRepository liveStreamRepository, LiveStreamStatisticsRepository liveStreamStatisticsRepository) {
         this.youtubeService = youtubeService;
@@ -67,8 +68,9 @@ public class LiveStreamServiceImpl implements LiveStreamService {
         this.liveStreamStatisticsRepository = liveStreamStatisticsRepository;
     }
 
+    /** 등록된 채널의 실시간 방송 등록 **/
     @Override
-    public void getLiveStreamFromYoutube() {
+    public void getLiveStreamFromYoutube() throws IOException {
         /**
          * 작업 흐름
          * 1. 현재 액티브한 채널 목록을 가져온다.
@@ -79,27 +81,37 @@ public class LiveStreamServiceImpl implements LiveStreamService {
 
         List<Channel> activeChannelList = channelRepository.getChannelListByStatus(CommonCodes.CHANNEL_STATUS.ACTIVE.CODE);
 
-        if(CollectionUtil.isNullOrEmpty(activeChannelList)) return;
+        if(CollectionUtil.isNullOrEmpty(activeChannelList)) {
+            log.info("there is no active channel!!");
+            return;
+        }
+
+        Map<String, Integer> videoChannelIdMap = new HashMap<>();
+        List<String> videoIds = new ArrayList<>();
 
         activeChannelList.forEach(channel -> {
             try {
                 List<String> topVideoIds = youtubeService.getRecentVideoIds(channel.getChannelUploadId());
-                List<Video> topVideoInfo = youtubeService.getVideoInfo(topVideoIds);
 
-                insertLiveStream(channel, topVideoInfo);
+                topVideoIds.forEach(id -> videoChannelIdMap.put(id, channel.getChannelId()));
+
+                videoIds.addAll(topVideoIds);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         });
+
+        List<Video> videoInfoList = youtubeService.getVideoInfo(videoIds);
+        insertLiveStream(videoChannelIdMap, videoInfoList);
+
     }
 
-    private void insertLiveStream(Channel channel, List<Video> topVideoInfo) {
+    private void insertLiveStream(Map<String, Integer> videoChannelMap ,List<Video> videoInfoList) {
         /**
          * 라이브 스트림 등록 기준
          * 1. liveBroadcastContent = live, upcoming인 방송
          **/
-
-        topVideoInfo.forEach(video -> {
+        videoInfoList.forEach(video -> {
             VideoSnippet snippet = video.getSnippet();
             VideoLiveStreamingDetails videoLiveStreamingDetails = video.getLiveStreamingDetails();
             VideoStatistics videoStatistics = video.getStatistics();
@@ -108,7 +120,7 @@ public class LiveStreamServiceImpl implements LiveStreamService {
                 log.info("liveStream detected! inserting info");
 
                 LiveStream liveStream = new LiveStream();
-                liveStream.setChannelId(channel.getChannelId());
+                liveStream.setChannelId(videoChannelMap.get(video.getId()));
                 liveStream.setLsName(snippet.getTitle());
                 liveStream.setLsYtId(video.getId());
                 liveStream.setStartTime(new Timestamp(videoLiveStreamingDetails.getScheduledStartTime().getValue()));
@@ -119,35 +131,99 @@ public class LiveStreamServiceImpl implements LiveStreamService {
                 );
                 liveStream.setGoodCnt(videoStatistics.getLikeCount().intValue());
 
-                liveStreamRepository.insertLiveStream(liveStream);
+                liveStreamRepository.upsertLiveStream(liveStream);
 
                 log.info("liveStream info inserted");
             }
         });
     }
 
+    /** 등록된 라이브중인 라이브 스트림 업데이트 **/
     @Override
-    public void updateLiveStreamFromYoutube() throws IOException {
+    public void updateLiveStreamStatistics() throws IOException {
         List<LiveStream> activeLiveStreamList = liveStreamRepository.getLiveStreamByStatus(CommonCodes.LIVE_STREAM_STATUS.LIVE.CODE);
 
-        if(CollectionUtil.isNullOrEmpty(activeLiveStreamList)) return;
+        if(CollectionUtil.isNullOrEmpty(activeLiveStreamList)) {
+            log.info("there is no live stream!");
+            return;
+        }
 
         List<Video> videoInfo = youtubeService.getVideoInfo(activeLiveStreamList.stream().map(liveStream -> liveStream.getLsYtId()).toList());
 
         videoInfo.forEach(video -> {
             VideoLiveStreamingDetails videoLiveStreamingDetails = video.getLiveStreamingDetails();
+            VideoStatistics videoStatistics = video.getStatistics();
+            VideoSnippet snippet = video.getSnippet();
+
+            int concurrentViewers = videoLiveStreamingDetails.getConcurrentViewers().intValue();
 
             LiveStream liveStream = activeLiveStreamList.stream().filter(ls -> ls.getLsYtId().equals(video.getId())).toList().get(0);
 
             if(liveStream == null) return;
 
+            /*라이브 스트림 통계자료 업데이트*/
             LiveStreamStatistics liveStreamStatistics = new LiveStreamStatistics();
             liveStreamStatistics.setLsId(liveStream.getLsId());
-            liveStreamStatistics.setConcurrentViewer(videoLiveStreamingDetails.getConcurrentViewers().intValue());
+            liveStreamStatistics.setConcurrentViewer(concurrentViewers);
 
             liveStreamStatisticsRepository.insertLiveStreamStatistics(liveStreamStatistics);
 
+            /*라이브 스트림 업데이트*/
+            liveStream.setGoodCnt(videoStatistics.getLikeCount().intValue());
+            if(liveStream.getMaxViewer().intValue() < concurrentViewers) {
+                liveStream.setMaxViewer(concurrentViewers);
+            }
+
+            Optional<Integer> avgViewer = liveStreamStatisticsRepository.getAvgViewer(liveStream.getLsId());
+
+            if(avgViewer.isPresent()) {
+                liveStream.setAvgViewer(avgViewer.get());
+            }
+
+            if(snippet.getLiveBroadcastContent().equals(NONE)) {
+                liveStream.setLsStatus(CommonCodes.LIVE_STREAM_STATUS.END.CODE);
+            }
+
+            liveStreamRepository.upsertLiveStream(liveStream);
         });
     }
 
+    /** 진행예정 라이브 스트림 시작여부 체크 **/
+    @Override
+    public void checkUpcomingLiveStream() throws IOException {
+        List<LiveStream> upcomingLiveStreams = liveStreamRepository.getLiveStreamByStatus(CommonCodes.LIVE_STREAM_STATUS.UPCOMING.CODE);
+
+        if(CollectionUtil.isNullOrEmpty(upcomingLiveStreams)) {
+            log.info("there is no upcoming liveStream!");
+            return;
+        }
+
+        List<LiveStream> upcomingLiveStreamsTargets = upcomingLiveStreams
+                .stream().filter(liveStream -> liveStream.isAboutToStart()).toList();
+
+        if(CollectionUtil.isNullOrEmpty(upcomingLiveStreamsTargets)) {
+            log.info("there is no upcoming liveStream about to start soon!!");
+        }
+
+        List<Video> videoInfoList = youtubeService.getVideoInfo(upcomingLiveStreamsTargets
+                .stream().map(liveStream -> liveStream.getLsYtId()).toList());
+
+        videoInfoList.forEach(video -> {
+            VideoSnippet snippet = video.getSnippet();
+
+            LiveStream liveStream = upcomingLiveStreamsTargets.stream().filter(ls -> ls.getLsYtId().equals(video.getId())).toList().get(0);
+
+            if(liveStream == null) return;
+
+            if(snippet.getLiveBroadcastContent().equals(LIVE)) {
+                liveStream.setLsStatus(CommonCodes.LIVE_STREAM_STATUS.LIVE.CODE);
+            }
+
+            if(snippet.getLiveBroadcastContent().equals(NONE)) {
+                liveStream.setLsStatus(CommonCodes.LIVE_STREAM_STATUS.END.CODE);
+            }
+
+            liveStreamRepository.upsertLiveStream(liveStream);
+        });
+    }
 }

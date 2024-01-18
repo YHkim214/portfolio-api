@@ -48,7 +48,7 @@ import java.util.Optional;
  */
 @Mapper
 public interface LiveStreamRepository {
-    void insertLiveStream(@Param("liveStream") LiveStream liveStream);
+    void upsertLiveStream(@Param("liveStream") LiveStream liveStream);
     List<LiveStream> getLiveStreamByStatus(@Param("lsStatus") String lsStatus);
     Optional<LiveStream> getLiveStreamByYtId(@Param("lsYtId") String lsYtId);
 }

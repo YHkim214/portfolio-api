@@ -28,6 +28,7 @@ import java.io.IOException;
  * 1/17/24        kim-yoonho       최초 생성
  */
 public interface LiveStreamService {
-    void getLiveStreamFromYoutube();
-    void updateLiveStreamFromYoutube() throws IOException;
+    void getLiveStreamFromYoutube() throws IOException;
+    void updateLiveStreamStatistics() throws IOException;
+    void checkUpcomingLiveStream() throws IOException;
 }

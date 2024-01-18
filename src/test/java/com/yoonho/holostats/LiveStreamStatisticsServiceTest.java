@@ -14,33 +14,36 @@
 
 package com.yoonho.holostats;
 
-import com.yoonho.holostats.services.liveStream.LiveStreamService;
+import com.yoonho.holostats.repositories.liveStream.LiveStreamStatisticsRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.io.IOException;
+import java.util.Optional;
 
 /**
  * packageName    : com.yoonho.holostats
- * fileName       : LiveStreamServiceTest
+ * fileName       : LiveStreamStatisticsServiceTest
  * author         : kim-yoonho
- * date           : 1/17/24
+ * date           : 1/18/24
  * description    :
  * ===========================================================
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------
- * 1/17/24        kim-yoonho       최초 생성
+ * 1/18/24        kim-yoonho       최초 생성
  */
 @SpringBootTest
-public class LiveStreamServiceTest {
+@Slf4j
+public class LiveStreamStatisticsServiceTest {
 
     @Autowired
-    private LiveStreamService liveStreamService;
+    private LiveStreamStatisticsRepository liveStreamStatisticsRepository;
 
     @Test
-    void test() throws IOException {
-        liveStreamService.getLiveStreamFromYoutube();
+    void test() {
+        Optional<Integer> result = liveStreamStatisticsRepository.getAvgViewer(17);
+        log.info("{}", result.get());
     }
 
 }

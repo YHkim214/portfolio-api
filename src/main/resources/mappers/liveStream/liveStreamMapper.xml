@@ -3,7 +3,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.yoonho.holostats.repositories.liveStream.LiveStreamRepository">
-    <insert id="insertLiveStream" parameterType="com.yoonho.holostats.models.liveStream.LiveStream">
+    <insert id="upsertLiveStream" parameterType="com.yoonho.holostats.models.liveStream.LiveStream">
         INSERT INTO TB_LS (
                            LS_ID,
                            CHANNEL_ID,
@@ -29,6 +29,9 @@
                     #{liveStream.lsStatus}
                )
         ON DUPLICATE KEY UPDATE LS_STATUS = VALUES(LS_STATUS),
+                                MAX_VIEWER = VALUES(MAX_VIEWER),
+                                AVG_VIEWER = VALUES(AVG_VIEWER),
+                                GOOD_CNT = VALUES(GOOD_CNT),
                                 START_TIME = VALUES(START_TIME),
                                 UPDATE_TIME = CURRENT_TIMESTAMP
     </insert>
@@ -50,8 +53,11 @@
         FROM
             TB_LS
         WHERE 1=1
-        AND
+        <if test="lsStatus != null and lsStatus != ''">
+            AND
             LS_STATUS = #{lsStatus}
+        </if>
+
     </select>
 
     <select id="getLiveStreamByYtId" resultType="com.yoonho.holostats.models.liveStream.LiveStream">

@@ -60,42 +60,63 @@ public class YoutubeServiceImpl implements YoutubeService{
 
     private final YouTube youtube;
 
-    @Value("${youtube.api.key}")
-    private String apiKey;
-
-    private final long MAX_RESULT = 5L;
-
     public YoutubeServiceImpl(YouTube youtube) {
         this.youtube = youtube;
     }
 
+    @Value("${youtube.api.key}")
+    private String apiKey;
     private final String SNIPPET = "snippet";
     private final String CONTENT_DETAILS = "contentDetails";
     private final String LIVE_STREAMING_DETAILS = "liveStreamingDetails";
-
     private final String STATISTICS = "statistics";
+    private final Integer MAX_ID_COUNT = 50;
+    private final long MAX_RESULT = 5L;
 
 
 
+    /** 비디오 정보 가져오기 **/
     @Override
     public List<Video> getVideoInfo(List<String> videoIds) throws IOException {
 
-        if(CollectionUtil.isNullOrEmpty(videoIds)) return new ArrayList<>();
+        if(CollectionUtil.isNullOrEmpty(videoIds)) {
+            log.info("there is no videoId!!!");
+            return new ArrayList<>();
+        }
 
-        log.info("start retrieving video info for -> {}", videoIds);
+        log.info("start retrieving {} video info of -> {}", videoIds.size(), videoIds);
 
-        YouTube.Videos.List videosListRequest = youtube.videos()
-                .list(List.of(SNIPPET, LIVE_STREAMING_DETAILS, STATISTICS))
-                .setId(videoIds)
-                .setKey(apiKey);
+        int startIndex = -1;
+        int endIndex = 0;
 
-        VideoListResponse response = videosListRequest.execute();
+        List<Video> videoInfoList = new ArrayList<>();
 
-        log.info("start retrieving video info for -> {} complete", videoIds);
+        while (endIndex < videoIds.size()){
 
-        return response.getItems();
+            if(startIndex == -1) {
+                startIndex = 0;
+                endIndex = MAX_ID_COUNT;
+            } else {
+                startIndex += MAX_ID_COUNT;
+                endIndex += MAX_ID_COUNT;
+            }
+
+            YouTube.Videos.List videosListRequest = youtube.videos()
+                    .list(List.of(SNIPPET, LIVE_STREAMING_DETAILS, STATISTICS))
+                    .setId(videoIds.subList(startIndex, endIndex <= videoIds.size() ? endIndex : videoIds.size() ))
+                    .setKey(apiKey);
+
+            VideoListResponse response = videosListRequest.execute();
+
+            videoInfoList.addAll(response.getItems());
+        }
+
+        log.info("start retrieving video complete", videoIds);
+
+        return videoInfoList;
     }
 
+    /** 재생목록의 비디오 목록 가져오기 **/
     @Override
     public List<String> getRecentVideoIds(String uploadId) throws IOException {
         if(StringUtil.isNullOrEmpty(uploadId)) return new ArrayList<>();
@@ -118,6 +139,7 @@ public class YoutubeServiceImpl implements YoutubeService{
         return resultList;
     }
 
+    /** 업로드 재생목록의 아이디 가져오기 **/
     @Override
     public Optional<String> getUploadId(String channelId) throws IOException {
 
