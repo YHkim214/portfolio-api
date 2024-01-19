@@ -30,10 +30,10 @@ package com.yoonho.holostats.services.youtube;
 
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.*;
+import com.yoonho.holostats.dtos.YoutubeVideoDto;
 import com.yoonho.holostats.utils.CollectionUtil;
 import com.yoonho.holostats.utils.StringUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -75,16 +75,18 @@ public class YoutubeServiceImpl implements YoutubeService{
 
 
 
-    /** 비디오 정보 가져오기 **/
+    /**
+     * 비디오 정보 가져오기
+     **/
     @Override
-    public List<Video> getVideoInfo(List<String> videoIds) throws IOException {
+    public List<YoutubeVideoDto> getVideoInfo(List<String> videoIds) throws IOException {
 
         if(CollectionUtil.isNullOrEmpty(videoIds)) {
             log.info("there is no videoId!!!");
             return new ArrayList<>();
         }
 
-        log.info("start retrieving {} video info of -> {}", videoIds.size(), videoIds);
+        log.info("start retrieving {} video info", videoIds.size());
 
         int startIndex = -1;
         int endIndex = 0;
@@ -113,7 +115,7 @@ public class YoutubeServiceImpl implements YoutubeService{
 
         log.info("start retrieving video complete", videoIds);
 
-        return videoInfoList;
+        return videoInfoList.stream().map(video -> new YoutubeVideoDto(video)).toList();
     }
 
     /** 재생목록의 비디오 목록 가져오기 **/
@@ -154,7 +156,7 @@ public class YoutubeServiceImpl implements YoutubeService{
         ChannelListResponse response = channelsRequest.execute();
         Optional<String> uploadId = Optional.ofNullable(response.getItems().get(0).getContentDetails().getRelatedPlaylists().getUploads());
 
-        log.info("start retrieving channel for -> {} complete! uploadId is {}", channelId, uploadId.get());
+        log.info("start retrieving channel for -> {} complete!", channelId);
 
         return uploadId;
     }

@@ -33,6 +33,7 @@
                                 AVG_VIEWER = VALUES(AVG_VIEWER),
                                 GOOD_CNT = VALUES(GOOD_CNT),
                                 START_TIME = VALUES(START_TIME),
+                                END_TIME = VALUES(END_TIME),
                                 UPDATE_TIME = CURRENT_TIMESTAMP
     </insert>
 
@@ -40,7 +41,7 @@
         SELECT
             LS_ID           AS lsId,
             CHANNEL_ID      AS channelId,
-            LS_NAME         AS laName,
+            LS_NAME         AS lsName,
             LS_YT_ID        AS LSYtId,
             START_TIME      AS startTime,
             END_TIME        AS endTime,

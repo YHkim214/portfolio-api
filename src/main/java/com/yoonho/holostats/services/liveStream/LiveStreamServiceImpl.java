@@ -14,11 +14,13 @@
 
 package com.yoonho.holostats.services.liveStream;
 
+import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.Video;
 import com.google.api.services.youtube.model.VideoLiveStreamingDetails;
 import com.google.api.services.youtube.model.VideoSnippet;
 import com.google.api.services.youtube.model.VideoStatistics;
 import com.yoonho.holostats.common.CommonCodes;
+import com.yoonho.holostats.dtos.YoutubeVideoDto;
 import com.yoonho.holostats.models.Channel;
 import com.yoonho.holostats.models.liveStream.LiveStream;
 import com.yoonho.holostats.models.liveStream.LiveStreamStatistics;
@@ -28,6 +30,7 @@ import com.yoonho.holostats.repositories.liveStream.LiveStreamStatisticsReposito
 import com.yoonho.holostats.services.youtube.YoutubeService;
 import com.yoonho.holostats.utils.CollectionUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -101,35 +104,38 @@ public class LiveStreamServiceImpl implements LiveStreamService {
             }
         });
 
-        List<Video> videoInfoList = youtubeService.getVideoInfo(videoIds);
+        List<YoutubeVideoDto> videoInfoList = youtubeService.getVideoInfo(videoIds);
         insertLiveStream(videoChannelIdMap, videoInfoList);
 
     }
 
-    private void insertLiveStream(Map<String, Integer> videoChannelMap ,List<Video> videoInfoList) {
+    private void insertLiveStream(Map<String, Integer> videoChannelMap ,List<YoutubeVideoDto> videoInfoList) {
         /**
          * 라이브 스트림 등록 기준
          * 1. liveBroadcastContent = live, upcoming인 방송
          **/
         videoInfoList.forEach(video -> {
-            VideoSnippet snippet = video.getSnippet();
-            VideoLiveStreamingDetails videoLiveStreamingDetails = video.getLiveStreamingDetails();
-            VideoStatistics videoStatistics = video.getStatistics();
-
-            if(snippet.getLiveBroadcastContent().equals(UPCOMING) || snippet.getLiveBroadcastContent().equals(LIVE)) {
+            if(video.getLiveBroadcastContent().equals(UPCOMING) || video.getLiveBroadcastContent().equals(LIVE)) {
                 log.info("liveStream detected! inserting info");
+
+                if(liveStreamRepository.getLiveStreamByYtId(video.getId()).isPresent()) {
+                    log.info("already exist in DB!");
+                    return;
+                }
 
                 LiveStream liveStream = new LiveStream();
                 liveStream.setChannelId(videoChannelMap.get(video.getId()));
-                liveStream.setLsName(snippet.getTitle());
+                liveStream.setLsName(video.getTitle());
                 liveStream.setLsYtId(video.getId());
-                liveStream.setStartTime(new Timestamp(videoLiveStreamingDetails.getScheduledStartTime().getValue()));
+                liveStream.setStartTime(video.getScheduledStartTime());
                 liveStream.setLsStatus(
-                        snippet.getLiveBroadcastContent().equals(UPCOMING) ?
+                        video.getLiveBroadcastContent().equals(UPCOMING) ?
                                 CommonCodes.LIVE_STREAM_STATUS.UPCOMING.CODE :
                                 CommonCodes.LIVE_STREAM_STATUS.LIVE.CODE
                 );
-                liveStream.setGoodCnt(videoStatistics.getLikeCount().intValue());
+                liveStream.setGoodCnt(video.getGoodCnt());
+                liveStream.setMaxViewer(0);
+                liveStream.setAvgViewer(0);
 
                 liveStreamRepository.upsertLiveStream(liveStream);
 
@@ -148,15 +154,9 @@ public class LiveStreamServiceImpl implements LiveStreamService {
             return;
         }
 
-        List<Video> videoInfo = youtubeService.getVideoInfo(activeLiveStreamList.stream().map(liveStream -> liveStream.getLsYtId()).toList());
+        List<YoutubeVideoDto> videoInfo = youtubeService.getVideoInfo(activeLiveStreamList.stream().map(liveStream -> liveStream.getLsYtId()).toList());
 
         videoInfo.forEach(video -> {
-            VideoLiveStreamingDetails videoLiveStreamingDetails = video.getLiveStreamingDetails();
-            VideoStatistics videoStatistics = video.getStatistics();
-            VideoSnippet snippet = video.getSnippet();
-
-            int concurrentViewers = videoLiveStreamingDetails.getConcurrentViewers().intValue();
-
             LiveStream liveStream = activeLiveStreamList.stream().filter(ls -> ls.getLsYtId().equals(video.getId())).toList().get(0);
 
             if(liveStream == null) return;
@@ -164,14 +164,14 @@ public class LiveStreamServiceImpl implements LiveStreamService {
             /*라이브 스트림 통계자료 업데이트*/
             LiveStreamStatistics liveStreamStatistics = new LiveStreamStatistics();
             liveStreamStatistics.setLsId(liveStream.getLsId());
-            liveStreamStatistics.setConcurrentViewer(concurrentViewers);
+            liveStreamStatistics.setConcurrentViewer(video.getConcurrentViewers());
 
             liveStreamStatisticsRepository.insertLiveStreamStatistics(liveStreamStatistics);
 
             /*라이브 스트림 업데이트*/
-            liveStream.setGoodCnt(videoStatistics.getLikeCount().intValue());
-            if(liveStream.getMaxViewer().intValue() < concurrentViewers) {
-                liveStream.setMaxViewer(concurrentViewers);
+            liveStream.setGoodCnt(video.getGoodCnt());
+            if(liveStream.getMaxViewer().intValue() < video.getConcurrentViewers()) {
+                liveStream.setMaxViewer(video.getConcurrentViewers());
             }
 
             Optional<Integer> avgViewer = liveStreamStatisticsRepository.getAvgViewer(liveStream.getLsId());
@@ -180,7 +180,7 @@ public class LiveStreamServiceImpl implements LiveStreamService {
                 liveStream.setAvgViewer(avgViewer.get());
             }
 
-            if(snippet.getLiveBroadcastContent().equals(NONE)) {
+            if(video.getLiveBroadcastContent().equals(NONE)) {
                 liveStream.setLsStatus(CommonCodes.LIVE_STREAM_STATUS.END.CODE);
             }
 
@@ -191,39 +191,70 @@ public class LiveStreamServiceImpl implements LiveStreamService {
     /** 진행예정 라이브 스트림 시작여부 체크 **/
     @Override
     public void checkUpcomingLiveStream() throws IOException {
-        List<LiveStream> upcomingLiveStreams = liveStreamRepository.getLiveStreamByStatus(CommonCodes.LIVE_STREAM_STATUS.UPCOMING.CODE);
+        List<LiveStream> upcomingLiveStreamList = liveStreamRepository.getLiveStreamByStatus(CommonCodes.LIVE_STREAM_STATUS.UPCOMING.CODE);
 
-        if(CollectionUtil.isNullOrEmpty(upcomingLiveStreams)) {
+        if(CollectionUtil.isNullOrEmpty(upcomingLiveStreamList)) {
             log.info("there is no upcoming liveStream!");
             return;
         }
 
-        List<LiveStream> upcomingLiveStreamsTargets = upcomingLiveStreams
+        List<LiveStream> upcomingLiveStreamsTargets = upcomingLiveStreamList
                 .stream().filter(liveStream -> liveStream.isAboutToStart()).toList();
 
         if(CollectionUtil.isNullOrEmpty(upcomingLiveStreamsTargets)) {
             log.info("there is no upcoming liveStream about to start soon!!");
+            return;
         }
 
-        List<Video> videoInfoList = youtubeService.getVideoInfo(upcomingLiveStreamsTargets
+        List<YoutubeVideoDto> videoInfoList = youtubeService.getVideoInfo(upcomingLiveStreamsTargets
                 .stream().map(liveStream -> liveStream.getLsYtId()).toList());
 
         videoInfoList.forEach(video -> {
-            VideoSnippet snippet = video.getSnippet();
-
             LiveStream liveStream = upcomingLiveStreamsTargets.stream().filter(ls -> ls.getLsYtId().equals(video.getId())).toList().get(0);
 
             if(liveStream == null) return;
 
-            if(snippet.getLiveBroadcastContent().equals(LIVE)) {
+            if(video.getLiveBroadcastContent().equals(LIVE)) {
                 liveStream.setLsStatus(CommonCodes.LIVE_STREAM_STATUS.LIVE.CODE);
             }
 
-            if(snippet.getLiveBroadcastContent().equals(NONE)) {
+            if(video.getLiveBroadcastContent().equals(NONE)) {
                 liveStream.setLsStatus(CommonCodes.LIVE_STREAM_STATUS.END.CODE);
             }
 
             liveStreamRepository.upsertLiveStream(liveStream);
         });
+    }
+
+    /** 일정 시간이 지난 라이브 스트림 처리 **/
+    @Override
+    public void cleanUpLiveStream() throws IOException {
+        List<LiveStream> liveStreamList = liveStreamRepository.getLiveStreamByStatus(null);
+
+        liveStreamList.forEach(liveStream -> {
+            if(!liveStream.getLsStatus().equals(CommonCodes.LIVE_STREAM_STATUS.END.CODE) && liveStream.shouldBeOver()) {
+                liveStream.setLsStatus(CommonCodes.LIVE_STREAM_STATUS.END.CODE);
+                liveStreamRepository.upsertLiveStream(liveStream);
+            }
+        });
+
+        /** 라이브 스트림이 종료되었지만, 종료시각이 업데이트 되지 않은 경우 **/
+        List<LiveStream> endedLiveStream = liveStreamList.stream()
+                .filter(liveStream -> liveStream.getEndTime() == null && liveStream.getLsStatus().equals(CommonCodes.LIVE_STREAM_STATUS.END.CODE))
+                .toList();
+
+        if(!endedLiveStream.isEmpty()) {
+            List<YoutubeVideoDto> videoInfoList = youtubeService
+                    .getVideoInfo(endedLiveStream.stream().map(liveStream -> liveStream.getLsYtId()).toList());
+
+            videoInfoList.forEach(video -> {
+                LiveStream liveStream = endedLiveStream.stream().filter(ls -> ls.getLsYtId().equals(video.getId())).toList().get(0);
+
+                liveStream.setEndTime(video.getActualEndTime());
+
+                liveStreamRepository.upsertLiveStream(liveStream);
+            });
+        }
+
     }
 }

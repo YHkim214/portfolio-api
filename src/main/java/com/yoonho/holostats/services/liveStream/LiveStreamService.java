@@ -31,4 +31,5 @@ public interface LiveStreamService {
     void getLiveStreamFromYoutube() throws IOException;
     void updateLiveStreamStatistics() throws IOException;
     void checkUpcomingLiveStream() throws IOException;
+    void cleanUpLiveStream() throws IOException;
 }

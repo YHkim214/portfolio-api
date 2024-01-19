@@ -59,10 +59,18 @@ public class LiveStream {
     private Timestamp createTime;   /** 생성시각 **/
     private Timestamp updateTime;   /** 수정시각 **/
 
-    private final long ONE_MINUTE = 60000L;
+    private final long ONE_MINUTE = 1000 * 60;
+    private final long THIRTEEN_HOURS = 1000 * 60 * 60 * 13;
 
     public boolean isAboutToStart() {
         Timestamp curTimestamp = new Timestamp(System.currentTimeMillis() + ONE_MINUTE);
         return curTimestamp.after(this.startTime);
+    }
+
+    public boolean shouldBeOver() {
+        Timestamp newTime = new Timestamp(this.startTime.getTime() + THIRTEEN_HOURS);
+        Timestamp curTimestamp = new Timestamp(System.currentTimeMillis());
+
+        return curTimestamp.after(newTime);
     }
 }

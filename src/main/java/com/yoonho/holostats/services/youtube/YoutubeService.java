@@ -29,6 +29,7 @@
 package com.yoonho.holostats.services.youtube;
 
 import com.google.api.services.youtube.model.Video;
+import com.yoonho.holostats.dtos.YoutubeVideoDto;
 
 import java.io.IOException;
 import java.util.List;
@@ -47,7 +48,7 @@ import java.util.Optional;
  */
 public interface YoutubeService {
 
-    List<Video> getVideoInfo(List<String> videoIds) throws IOException;
+    List<YoutubeVideoDto> getVideoInfo(List<String> videoIds) throws IOException;
 
     List<String> getRecentVideoIds(String uploadId) throws IOException;
 
