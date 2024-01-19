@@ -28,6 +28,7 @@
 
 package com.yoonho.holostats.models.liveStream;
 
+import com.yoonho.holostats.models.Channel;
 import lombok.Data;
 
 import java.sql.Timestamp;
@@ -58,6 +59,8 @@ public class LiveStream {
     private String lsStatus;        /** 라이브 스트리밍 상태 값 **/
     private Timestamp createTime;   /** 생성시각 **/
     private Timestamp updateTime;   /** 수정시각 **/
+
+    private Channel channel;
 
     private final long ONE_MINUTE = 1000 * 60;
     private final long THIRTEEN_HOURS = 1000 * 60 * 60 * 13;

@@ -37,6 +37,57 @@
                                 UPDATE_TIME = CURRENT_TIMESTAMP
     </insert>
 
+    <select id="getLiveStream" resultMap="liveStreamResult">
+        SELECT
+        TL.LS_ID           AS lsId,
+        TL.CHANNEL_ID      AS channelId,
+        TL.LS_NAME         AS lsName,
+        TL.LS_YT_ID        AS lsYtId,
+        TL.START_TIME      AS startTime,
+        TL.END_TIME        AS endTime,
+        TL.MAX_VIEWER      AS maxViewer,
+        TL.AVG_VIEWER      AS avgViewer,
+        TL.GOOD_CNT        AS goodCnt,
+        TL.LS_STATUS       AS lsStatus,
+        TL.CREATE_TIME     AS createTime,
+        TL.UPDATE_TIME     AS updateTime,
+
+        TC.CHANNEL_ID      AS tc_channelId,
+        TC.CHANNEL_NAME    AS tc_channelName
+        FROM
+            TB_LS AS TL
+        LEFT JOIN
+            TB_CHANNEL AS TC
+        ON
+            TL.CHANNEL_ID = TC.CHANNEL_ID
+        WHERE 1=1
+        AND (LS_STATUS = 'UPCOMING' OR LS_STATUS = 'LIVE')
+        ORDER BY
+            MAX_VIEWER DESC
+        LIMIT #{maxResult}
+
+    </select>
+
+    <resultMap id="liveStreamResult" type="com.yoonho.holostats.models.liveStream.LiveStream">
+        <id property="lsId" column="lsId"/>
+        <result property="channelId" column="channelId"/>
+        <result property="lsName" column="lsName"/>
+        <result property="lsYtId" column="lsYtId"/>
+        <result property="startTime" column="startTime"/>
+        <result property="endTime" column="endTime"/>
+        <result property="maxViewer" column="maxViewer"/>
+        <result property="avgViewer" column="avgViewer"/>
+        <result property="goodCnt" column="goodCnt"/>
+        <result property="createTime" column="createTime"/>
+        <result property="updateTime" column="updateTime"/>
+        <association property="channel" column="tc_channelId" javaType="com.yoonho.holostats.models.Channel" resultMap="channelResult"/>
+    </resultMap>
+
+    <resultMap id="channelResult" type="com.yoonho.holostats.models.Channel">
+        <id property="channelId" column="tc_channelId"/>
+        <result property="channelName" column="tc_channelName"/>
+    </resultMap>
+
     <select id="getLiveStreamByStatus" resultType="com.yoonho.holostats.models.liveStream.LiveStream">
         SELECT
             LS_ID           AS lsId,

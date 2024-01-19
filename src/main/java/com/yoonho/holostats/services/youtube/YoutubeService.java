@@ -28,7 +28,7 @@
 
 package com.yoonho.holostats.services.youtube;
 
-import com.google.api.services.youtube.model.Video;
+import com.yoonho.holostats.dtos.YoutubeChannelDto;
 import com.yoonho.holostats.dtos.YoutubeVideoDto;
 
 import java.io.IOException;
@@ -52,6 +52,6 @@ public interface YoutubeService {
 
     List<String> getRecentVideoIds(String uploadId) throws IOException;
 
-    Optional<String> getUploadId(String channelId) throws IOException;
+    YoutubeChannelDto getChannelInfo(String channelId) throws IOException;
 
 }

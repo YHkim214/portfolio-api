@@ -29,6 +29,7 @@
 package com.yoonho.holostats.services.channel;
 
 import com.yoonho.holostats.common.CommonCodes;
+import com.yoonho.holostats.dtos.YoutubeChannelDto;
 import com.yoonho.holostats.models.Channel;
 import com.yoonho.holostats.repositories.ChannelRepository;
 import com.yoonho.holostats.services.youtube.YoutubeService;
@@ -81,19 +82,27 @@ public class ChannelServiceImpl implements ChannelService{
             talent.select("h3 span").remove();
             String channelName = talent.select("h3").text();
             String ytId = "";
-            String uploadId = "";
+            YoutubeChannelDto youtubeChannelDto = null;
 
             log.info("crawling start for => {}", channelName);
             try {
                 ytId = getYtId(talent).orElseThrow();
-                uploadId = youtubeService.getUploadId(ytId).orElseThrow();
+                youtubeChannelDto = youtubeService.getChannelInfo(ytId);
             } catch (Exception e) {
                 log.info("retreiving ytId for {} failed", channelName);
             }
 
             log.info("crawling for {} finished", channelName);
 
-            return new Channel(channelName, ytId, uploadId, CommonCodes.CHANNEL_STATUS.ACTIVE.CODE);
+            Channel channel = new Channel();
+            channel.setChannelName(channelName);
+            channel.setChannelYtId(ytId);
+            channel.setChannelUploadId(youtubeChannelDto.getUploadId());
+            channel.setChannelYtName(youtubeChannelDto.getChannelName());
+            channel.setChannelYtThumbnail(youtubeChannelDto.getThumbNail());
+            channel.setChannelStatus(CommonCodes.CHANNEL_STATUS.ACTIVE.CODE);
+
+            return channel;
 
         }).collect(Collectors.toList());
 

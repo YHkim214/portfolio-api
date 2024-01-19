@@ -30,6 +30,7 @@ package com.yoonho.holostats.services.youtube;
 
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.*;
+import com.yoonho.holostats.dtos.YoutubeChannelDto;
 import com.yoonho.holostats.dtos.YoutubeVideoDto;
 import com.yoonho.holostats.utils.CollectionUtil;
 import com.yoonho.holostats.utils.StringUtil;
@@ -143,21 +144,25 @@ public class YoutubeServiceImpl implements YoutubeService{
 
     /** 업로드 재생목록의 아이디 가져오기 **/
     @Override
-    public Optional<String> getUploadId(String channelId) throws IOException {
-
-        if(StringUtil.isNullOrEmpty(channelId)) return Optional.ofNullable(null);
+    public YoutubeChannelDto getChannelInfo(String channelId) throws IOException {
 
         log.info("start retrieving channel for -> {}", channelId);
 
         YouTube.Channels.List channelsRequest = youtube.channels()
-                .list(List.of(CONTENT_DETAILS))
+                .list(List.of(CONTENT_DETAILS, SNIPPET))
                 .setId(List.of(channelId))
                 .setKey(apiKey);
         ChannelListResponse response = channelsRequest.execute();
-        Optional<String> uploadId = Optional.ofNullable(response.getItems().get(0).getContentDetails().getRelatedPlaylists().getUploads());
+        Channel channel = response.getItems().get(0);
+
+        YoutubeChannelDto youtubeChannelDto = new YoutubeChannelDto();
+
+        youtubeChannelDto.setUploadId(channel.getContentDetails().getRelatedPlaylists().getUploads());
+        youtubeChannelDto.setThumbNail(channel.getSnippet().getThumbnails().getDefault().getUrl());
+        youtubeChannelDto.setChannelName(channel.getSnippet().getTitle());
 
         log.info("start retrieving channel for -> {} complete!", channelId);
 
-        return uploadId;
+        return youtubeChannelDto;
     }
 }

@@ -12,27 +12,25 @@
  *
  */
 
-package com.yoonho.holostats.services.member;
+package com.yoonho.holostats.dtos;
 
-import com.yoonho.holostats.dtos.request.RegisterMemberRequestDto;
-import com.yoonho.holostats.dtos.response.GetMemberInfoResponseDto;
-
-import java.io.IOException;
+import lombok.Data;
 
 /**
- * packageName    : com.yoonho.holostats.services
- * fileName       : MemberService
+ * packageName    : com.yoonho.holostats.dtos
+ * fileName       : YoutubeChannelDto
  * author         : kim-yoonho
- * date           : 12/21/23
- * description    : 회원 서비스
+ * date           : 1/19/24
+ * description    :
  * ===========================================================
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------
- * 12/21/23        kim-yoonho       최초 생성
+ * 1/19/24        kim-yoonho       최초 생성
  */
-public interface MemberService {
 
-    void registerMember(RegisterMemberRequestDto registerMemberRequestDto) throws IOException;
-    GetMemberInfoResponseDto getMemberByName(String memberName);
-
+@Data
+public class YoutubeChannelDto {
+    private String channelName;
+    private String thumbNail;
+    private String uploadId;
 }

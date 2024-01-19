@@ -1,7 +1,6 @@
 package com.yoonho.holostats.models;
 
 import lombok.Data;
-import org.springframework.context.annotation.Bean;
 
 import java.sql.Timestamp;
 

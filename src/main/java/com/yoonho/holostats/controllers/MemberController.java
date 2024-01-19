@@ -6,7 +6,10 @@ import com.yoonho.holostats.configs.security.JwtGenerator;
 import com.yoonho.holostats.dtos.response.GetMemberInfoResponseDto;
 import com.yoonho.holostats.services.member.MemberService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * packageName    : com.yoonho.holostats.controllers

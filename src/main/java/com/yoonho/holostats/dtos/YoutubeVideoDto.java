@@ -14,13 +14,12 @@
 
 package com.yoonho.holostats.dtos;
 
-import com.google.api.client.util.DateTime;
-import com.google.api.services.youtube.model.*;
-
-import jdk.jshell.Snippet;
+import com.google.api.services.youtube.model.Video;
+import com.google.api.services.youtube.model.VideoLiveStreamingDetails;
+import com.google.api.services.youtube.model.VideoSnippet;
+import com.google.api.services.youtube.model.VideoStatistics;
 import lombok.Data;
 
-import java.math.BigInteger;
 import java.sql.Timestamp;
 
 /**

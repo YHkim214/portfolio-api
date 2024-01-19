@@ -5,25 +5,29 @@
 <mapper namespace="com.yoonho.holostats.repositories.ChannelRepository">
 
     <insert id="upsertChannels">
-        INSERT INTO TB_CHANNEL(CHANNEL_NAME, CHANNEL_YT_ID, CHANNEL_UPLOAD_ID, CHANNEL_STATUS) VALUES
+        INSERT INTO TB_CHANNEL(CHANNEL_NAME, CHANNEL_YT_ID, CHANNEL_YT_NAME, CHANNEL_YT_THUMBNAIL, CHANNEL_UPLOAD_ID, CHANNEL_STATUS) VALUES
         <foreach collection="channels" item="channel" separator=",">
-        (#{channel.channelName}, #{channel.channelYtId}, #{channel.channelUploadId}, #{channel.channelStatus})
+        (#{channel.channelName}, #{channel.channelYtId}, #{channel.channelYtName}, #{channel.channelYtThumbnail}, #{channel.channelUploadId}, #{channel.channelStatus})
         </foreach>
         ON DUPLICATE KEY UPDATE CHANNEL_YT_ID = VALUES(CHANNEL_YT_ID),
                                 CHANNEL_STATUS = VALUES(CHANNEL_STATUS),
-                                CHANNEL_UPLOAD_ID =VALUES(CHANNEL_UPLOAD_ID) ,
-                                UPDATE_TIME = CURRENT_TIMESTAMP
+                                CHANNEL_YT_NAME = VALUES(CHANNEL_YT_NAME),
+                                CHANNEL_YT_THUMBNAIL = VALUES(CHANNEL_YT_THUMBNAIL),
+                                CHANNEL_UPLOAD_ID = VALUES(CHANNEL_UPLOAD_ID),
+                                UPDATE_TIME = CURRENT_TIMESTAMP;
     </insert>
 
     <select id="getChannelListByStatus" resultType="com.yoonho.holostats.models.Channel">
         SELECT
-            CHANNEL_ID          AS channelId,
-            CHANNEL_NAME        AS channelName,
-            CHANNEL_YT_ID       AS channelYtId,
-            CHANNEL_UPLOAD_ID   AS channelUploadId,
-            CHANNEL_STATUS      AS channelStatus,
-            CREATE_TIME         AS createTime,
-            UPDATE_TIME         AS updateTime
+            CHANNEL_ID              AS channelId,
+            CHANNEL_NAME            AS channelName,
+            CHANNEL_YT_ID           AS channelYtId,
+            CHANNEL_YT_NAME         AS channelYtName,
+            CHANNEL_YT_THUMBNAIL    AS channelYtThumbnail,
+            CHANNEL_UPLOAD_ID       AS channelUploadId,
+            CHANNEL_STATUS          AS channelStatus,
+            CREATE_TIME             AS createTime,
+            UPDATE_TIME             AS updateTime
         FROM
             TB_CHANNEL
         WHERE 1=1

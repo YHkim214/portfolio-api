@@ -35,7 +35,7 @@ import java.util.List;
  * 1/11/24        kim-yoonho       최초 생성
  */
 
-@Component
+//@Component
 @Slf4j
 public class ChannelScheduler {
 
@@ -45,7 +45,7 @@ public class ChannelScheduler {
         this.channelService = channelService;
     }
 
-//    @Scheduled(initialDelay = 1000 * 5, fixedDelay=Long.MAX_VALUE)
+    @Scheduled(initialDelay = 1000 * 5, fixedDelay=Long.MAX_VALUE)
     public void getAndInsertChannel() throws IOException {
         log.info("===================================Crawling started!");
         List<Channel> channels = channelService.getChannels();

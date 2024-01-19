@@ -14,11 +14,6 @@
 
 package com.yoonho.holostats.services.liveStream;
 
-import com.google.api.services.youtube.YouTube;
-import com.google.api.services.youtube.model.Video;
-import com.google.api.services.youtube.model.VideoLiveStreamingDetails;
-import com.google.api.services.youtube.model.VideoSnippet;
-import com.google.api.services.youtube.model.VideoStatistics;
 import com.yoonho.holostats.common.CommonCodes;
 import com.yoonho.holostats.dtos.YoutubeVideoDto;
 import com.yoonho.holostats.models.Channel;
@@ -30,11 +25,9 @@ import com.yoonho.holostats.repositories.liveStream.LiveStreamStatisticsReposito
 import com.yoonho.holostats.services.youtube.YoutubeService;
 import com.yoonho.holostats.utils.CollectionUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.util.*;
 
 /**
@@ -63,6 +56,7 @@ public class LiveStreamServiceImpl implements LiveStreamService {
     private final String UPCOMING = "upcoming";
     private final String LIVE = "live";
     private final String NONE = "none";
+    private final Integer MAX_RESULT = 20;
 
     public LiveStreamServiceImpl(YoutubeService youtubeService, ChannelRepository channelRepository, LiveStreamRepository liveStreamRepository, LiveStreamStatisticsRepository liveStreamStatisticsRepository) {
         this.youtubeService = youtubeService;
@@ -118,7 +112,12 @@ public class LiveStreamServiceImpl implements LiveStreamService {
             if(video.getLiveBroadcastContent().equals(UPCOMING) || video.getLiveBroadcastContent().equals(LIVE)) {
                 log.info("liveStream detected! inserting info");
 
-                if(liveStreamRepository.getLiveStreamByYtId(video.getId()).isPresent()) {
+                Optional<LiveStream> liveStreamDb = liveStreamRepository.getLiveStreamByYtId(video.getId());
+
+                /** 이미 등록된경우, 등록예정 상태인 경우에만 통과 **/
+                if(liveStreamDb.isPresent()
+                        && (liveStreamDb.get().getLsStatus().equals(CommonCodes.LIVE_STREAM_STATUS.LIVE.CODE)
+                        || liveStreamDb.get().getLsStatus().equals(CommonCodes.LIVE_STREAM_STATUS.END.CODE))) {
                     log.info("already exist in DB!");
                     return;
                 }
@@ -188,7 +187,7 @@ public class LiveStreamServiceImpl implements LiveStreamService {
         });
     }
 
-    /** 진행예정 라이브 스트림 시작여부 체크 **/
+    /** 진행예정 라이브 스트림 상태 체크 **/
     @Override
     public void checkUpcomingLiveStream() throws IOException {
         List<LiveStream> upcomingLiveStreamList = liveStreamRepository.getLiveStreamByStatus(CommonCodes.LIVE_STREAM_STATUS.UPCOMING.CODE);
@@ -255,6 +254,9 @@ public class LiveStreamServiceImpl implements LiveStreamService {
                 liveStreamRepository.upsertLiveStream(liveStream);
             });
         }
+    }
 
+    public List<LiveStream> getLiveStream() {
+        return liveStreamRepository.getLiveStream(MAX_RESULT);
     }
 }

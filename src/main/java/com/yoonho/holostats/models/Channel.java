@@ -16,8 +16,8 @@ package com.yoonho.holostats.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 
 /**
@@ -33,19 +33,15 @@ import java.sql.Timestamp;
  */
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class Channel {
-    private Integer channelId;      //채널 아이디
-    private String channelName;     //채널 명
-    private String channelYtId;     //유튜브 채널 아이디
-    private String channelUploadId; //유튜브 채널 업로드 재생목록 아이디
-    private String channelStatus;   //채널 상태
+    private Integer channelId;          //채널 아이디
+    private String channelName;         //채널 명
+    private String channelYtId;         //유튜브 채널 아이디
+    private String channelYtName;       //유튜브 채널 명
+    private String channelYtThumbnail;  //유튜브 채널 섬네일
+    private String channelUploadId;     //유튜브 채널 업로드 재생목록 아이디
+    private String channelStatus;       //채널 상태
     private Timestamp createTime;
     private Timestamp updateTime;
-
-    public Channel(String channelName, String channelYtId, String channelUploadId, String channelStatus) {
-        this.channelName = channelName;
-        this.channelYtId = channelYtId;
-        this.channelUploadId = channelUploadId;
-        this.channelStatus = channelStatus;
-    }
 }
