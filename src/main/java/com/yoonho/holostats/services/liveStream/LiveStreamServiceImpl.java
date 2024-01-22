@@ -16,6 +16,7 @@ package com.yoonho.holostats.services.liveStream;
 
 import com.yoonho.holostats.common.CommonCodes;
 import com.yoonho.holostats.dtos.YoutubeVideoDto;
+import com.yoonho.holostats.dtos.request.GetLiveStreamRequestDto;
 import com.yoonho.holostats.models.Channel;
 import com.yoonho.holostats.models.liveStream.LiveStream;
 import com.yoonho.holostats.models.liveStream.LiveStreamStatistics;
@@ -126,6 +127,7 @@ public class LiveStreamServiceImpl implements LiveStreamService {
                 liveStream.setChannelId(videoChannelMap.get(video.getId()));
                 liveStream.setLsName(video.getTitle());
                 liveStream.setLsYtId(video.getId());
+                liveStream.setLsYtThumbnail(video.getThumbnail());
                 liveStream.setStartTime(video.getScheduledStartTime());
                 liveStream.setLsStatus(
                         video.getLiveBroadcastContent().equals(UPCOMING) ?
@@ -221,6 +223,9 @@ public class LiveStreamServiceImpl implements LiveStreamService {
                 liveStream.setLsStatus(CommonCodes.LIVE_STREAM_STATUS.END.CODE);
             }
 
+            liveStream.setLsName(video.getTitle());
+            liveStream.setLsYtThumbnail(video.getThumbnail());
+
             liveStreamRepository.upsertLiveStream(liveStream);
         });
     }
@@ -256,7 +261,8 @@ public class LiveStreamServiceImpl implements LiveStreamService {
         }
     }
 
-    public List<LiveStream> getLiveStream() {
-        return liveStreamRepository.getLiveStream(MAX_RESULT);
+    @Override
+    public List<LiveStream> getLiveStream(GetLiveStreamRequestDto getLiveStreamRequestDto) {
+        return liveStreamRepository.getLiveStream(MAX_RESULT, getLiveStreamRequestDto.getDate());
     }
 }

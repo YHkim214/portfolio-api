@@ -14,7 +14,11 @@
 
 package com.yoonho.holostats.services.liveStream;
 
+import com.yoonho.holostats.dtos.request.GetLiveStreamRequestDto;
+import com.yoonho.holostats.models.liveStream.LiveStream;
+
 import java.io.IOException;
+import java.util.List;
 
 /**
  * packageName    : com.yoonho.holostats.services.ls
@@ -32,4 +36,5 @@ public interface LiveStreamService {
     void updateLiveStreamStatistics() throws IOException;
     void checkUpcomingLiveStream() throws IOException;
     void cleanUpLiveStream() throws IOException;
+    List<LiveStream> getLiveStream(GetLiveStreamRequestDto getLiveStreamRequestDto);
 }

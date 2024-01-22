@@ -54,6 +54,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                     .requestMatchers("/api/auth/**").permitAll()
                     .requestMatchers("/api/uploads/**").permitAll()
+                    .requestMatchers("/api/liveStream/**").permitAll()
                     .anyRequest().authenticated()
             )
             .formLogin(Customizer.withDefaults())

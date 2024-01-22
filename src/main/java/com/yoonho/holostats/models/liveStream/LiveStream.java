@@ -50,7 +50,8 @@ public class LiveStream {
     private Integer lsId;           /** 라이브 스트리밍 아이디 **/
     private Integer channelId;      /** 채널 아이디 **/
     private String lsName;          /** 라이브 스트리밍 이름 **/
-    private String lsYtId;          /** 라이브 스트리밍 유튜브 아이다 **/
+    private String lsYtId;          /** 라이브 스트리밍 유튜브 아이디 **/
+    private String lsYtThumbnail;   /** 라이브 스트리밍 유튜브 섬네일 **/
     private Timestamp startTime;    /** 라이브 스트리밍 시작시각 **/
     private Timestamp endTime;      /** 라이브 스트리밍 종료시각 **/
     private Integer maxViewer;      /** 라이브 스트리밍 최대 시청자 **/

@@ -40,6 +40,7 @@ public class YoutubeVideoDto {
     private String id;
     private String title;
     private String liveBroadcastContent;
+    private String thumbnail;
     private Timestamp scheduledStartTime;
     private Timestamp actualEndTime;
     private int concurrentViewers;
@@ -53,6 +54,7 @@ public class YoutubeVideoDto {
         this.id = video.getId();
         this.title = snippet.getTitle();
         this.liveBroadcastContent = snippet.getLiveBroadcastContent();
+        this.thumbnail = snippet.getThumbnails().getDefault().getUrl();
 
         if(liveBroadcastContentDetails != null) {
             this.scheduledStartTime = liveBroadcastContentDetails.getScheduledStartTime() == null ?
