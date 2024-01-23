@@ -56,6 +56,7 @@ public class LiveStream {
     private Timestamp endTime;      /** 라이브 스트리밍 종료시각 **/
     private Integer maxViewer;      /** 라이브 스트리밍 최대 시청자 **/
     private Integer avgViewer;      /** 라이브 스트리밍 평균 시정자 **/
+    private Integer concurrentViewer;   /** 라이브 스트리밍 현재 시청자 **/
     private Integer goodCnt;        /** 라이브 스트리밍 좋아요 수 **/
     private String lsStatus;        /** 라이브 스트리밍 상태 값 **/
     private Timestamp createTime;   /** 생성시각 **/

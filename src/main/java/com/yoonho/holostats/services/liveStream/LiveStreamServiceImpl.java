@@ -175,6 +175,8 @@ public class LiveStreamServiceImpl implements LiveStreamService {
                 liveStream.setMaxViewer(video.getConcurrentViewers());
             }
 
+            liveStream.setConcurrentViewer(video.getConcurrentViewers());
+
             Optional<Integer> avgViewer = liveStreamStatisticsRepository.getAvgViewer(liveStream.getLsId());
 
             if(avgViewer.isPresent()) {

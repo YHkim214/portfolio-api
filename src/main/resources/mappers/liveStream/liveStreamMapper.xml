@@ -14,6 +14,7 @@
                            END_TIME,
                            MAX_VIEWER,
                            AVG_VIEWER,
+                           CONCURRENT_VIEWER,
                            GOOD_CNT,
                            LS_STATUS
         )
@@ -27,6 +28,7 @@
                     #{liveStream.endTime},
                     #{liveStream.maxViewer},
                     #{liveStream.avgViewer},
+                    #{liveStream.concurrentViewer}
                     #{liveStream.goodCnt},
                     #{liveStream.lsStatus}
                )
@@ -35,6 +37,7 @@
                                 LS_YT_THUMBNAIL = VALUES(LS_YT_THUMBNAIL),
                                 MAX_VIEWER = VALUES(MAX_VIEWER),
                                 AVG_VIEWER = VALUES(AVG_VIEWER),
+                                CONCURRENT_VIEWER = VALUES(CONCURRENT_VIEWER),
                                 GOOD_CNT = VALUES(GOOD_CNT),
                                 START_TIME = VALUES(START_TIME),
                                 END_TIME = VALUES(END_TIME),
@@ -43,23 +46,27 @@
 
     <select id="getLiveStream" resultMap="liveStreamResult">
         SELECT
-        TL.LS_ID            AS lsId,
-        TL.CHANNEL_ID       AS channelId,
-        TL.LS_NAME          AS lsName,
-        TL.LS_YT_ID         AS lsYtId,
-        TL.LS_YT_THUMBNAIL  AS lsYtThumbnail,
-        TL.START_TIME       AS startTime,
-        TL.END_TIME         AS endTime,
-        TL.MAX_VIEWER       AS maxViewer,
-        TL.AVG_VIEWER       AS avgViewer,
-        TL.GOOD_CNT         AS goodCnt,
-        TL.LS_STATUS        AS lsStatus,
-        TL.CREATE_TIME      AS createTime,
-        TL.UPDATE_TIME      AS updateTime,
+            TL.LS_ID            AS lsId,
+            TL.CHANNEL_ID       AS channelId,
+            TL.LS_NAME          AS lsName,
+            TL.LS_YT_ID         AS lsYtId,
+            TL.LS_YT_THUMBNAIL  AS lsYtThumbnail,
+            TL.START_TIME       AS startTime,
+            TL.END_TIME         AS endTime,
+            TL.MAX_VIEWER       AS maxViewer,
+            TL.AVG_VIEWER       AS avgViewer,
+            TL.CONCURRENT_VIEWER    AS concurrentViewer
+            TL.GOOD_CNT         AS goodCnt,
+            TL.LS_STATUS        AS lsStatus,
+            TL.CREATE_TIME      AS createTime,
+            TL.UPDATE_TIME      AS updateTime,
 
-        TC.CHANNEL_ID           AS tc_channelId,
-        TC.CHANNEL_NAME         AS tc_channelName,
-        TC.CHANNEL_YT_THUMBNAIL AS tc_channelYtThumbnail
+            TC.CHANNEL_ID           AS tc_channelId,
+            TC.CHANNEL_NAME         AS tc_channelName,
+            TC.CHANNEL_YT_THUMBNAIL AS tc_channelYtThumbnail,
+            TC.CHANNEL_YT_NAME      AS tc_channelYtName,
+            TC.CHANNEL_YT_ID        AS tc_channelYtId
+
         FROM
             TB_LS AS TL
         LEFT JOIN
@@ -88,6 +95,7 @@
         <result property="maxViewer" column="maxViewer"/>
         <result property="avgViewer" column="avgViewer"/>
         <result property="goodCnt" column="goodCnt"/>
+        <result property="lsStatus" column="lsStatus"/>
         <result property="createTime" column="createTime"/>
         <result property="updateTime" column="updateTime"/>
         <association property="channel" column="tc_channelId" javaType="com.yoonho.holostats.models.Channel" resultMap="channelResult"/>
@@ -96,6 +104,9 @@
     <resultMap id="channelResult" type="com.yoonho.holostats.models.Channel">
         <id property="channelId" column="tc_channelId"/>
         <result property="channelName" column="tc_channelName"/>
+        <result property="channelYtThumbnail" column="tc_channelYtThumbnail"/>
+        <result property="channelYtName" column="tc_channelYtName"/>
+        <result property="channelYtId" column="tc_channelYtId"/>
     </resultMap>
 
     <select id="getLiveStreamByStatus" resultType="com.yoonho.holostats.models.liveStream.LiveStream">
@@ -109,6 +120,7 @@
             END_TIME         AS endTime,
             MAX_VIEWER       AS maxViewer,
             AVG_VIEWER       AS avgViewer,
+            CONCURRENT_VIEWER   AS concurrentViewer,
             GOOD_CNT         AS goodCnt,
             LS_STATUS        AS lsStatus,
             CREATE_TIME      AS createTime,
@@ -134,6 +146,7 @@
             END_TIME         AS endTime,
             MAX_VIEWER       AS maxViewer,
             AVG_VIEWER       AS avgViewer,
+            CONCURRENT_VIEWER AS concurrentViewer,
             GOOD_CNT         AS goodCnt,
             LS_STATUS        AS lsStatus,
             CREATE_TIME      AS createTime,
