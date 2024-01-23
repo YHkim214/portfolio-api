@@ -54,7 +54,9 @@ public class YoutubeVideoDto {
         this.id = video.getId();
         this.title = snippet.getTitle();
         this.liveBroadcastContent = snippet.getLiveBroadcastContent();
-        this.thumbnail = snippet.getThumbnails().getMaxres().getUrl();
+        this.thumbnail = snippet.getThumbnails().getMaxres() == null ?
+                snippet.getThumbnails().getDefault().getUrl() :
+                snippet.getThumbnails().getMaxres().getUrl();
 
         if(liveBroadcastContentDetails != null) {
             this.scheduledStartTime = liveBroadcastContentDetails.getScheduledStartTime() == null ?

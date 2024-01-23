@@ -28,7 +28,7 @@
                     #{liveStream.endTime},
                     #{liveStream.maxViewer},
                     #{liveStream.avgViewer},
-                    #{liveStream.concurrentViewer}
+                    #{liveStream.concurrentViewer},
                     #{liveStream.goodCnt},
                     #{liveStream.lsStatus}
                )
@@ -55,7 +55,7 @@
             TL.END_TIME         AS endTime,
             TL.MAX_VIEWER       AS maxViewer,
             TL.AVG_VIEWER       AS avgViewer,
-            TL.CONCURRENT_VIEWER    AS concurrentViewer
+            TL.CONCURRENT_VIEWER    AS concurrentViewer,
             TL.GOOD_CNT         AS goodCnt,
             TL.LS_STATUS        AS lsStatus,
             TL.CREATE_TIME      AS createTime,
@@ -94,6 +94,7 @@
         <result property="endTime" column="endTime"/>
         <result property="maxViewer" column="maxViewer"/>
         <result property="avgViewer" column="avgViewer"/>
+        <result property="concurrentViewer" column="concurrentViewer"/>
         <result property="goodCnt" column="goodCnt"/>
         <result property="lsStatus" column="lsStatus"/>
         <result property="createTime" column="createTime"/>

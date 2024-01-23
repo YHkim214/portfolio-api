@@ -17,10 +17,9 @@ package com.yoonho.holostats.controllers;
 import com.yoonho.holostats.common.CommonController;
 import com.yoonho.holostats.common.ResponseEntityWrapper;
 import com.yoonho.holostats.dtos.request.GetLiveStreamRequestDto;
-import com.yoonho.holostats.models.liveStream.LiveStream;
+import com.yoonho.holostats.dtos.response.GetLiveStreamResponseDto;
 import com.yoonho.holostats.services.liveStream.LiveStreamService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,7 +51,7 @@ public class LiveStreamController extends CommonController {
 
     @GetMapping("/list")
     public ResponseEntity getLiveStreamList(@RequestBody GetLiveStreamRequestDto getLiveStreamRequestDto) {
-        List<LiveStream> liveStreamList = liveStreamService.getLiveStream(getLiveStreamRequestDto);
+        List<GetLiveStreamResponseDto> liveStreamList = liveStreamService.getLiveStream(getLiveStreamRequestDto);
 
         return ResponseEntityWrapper.success(liveStreamList);
     }

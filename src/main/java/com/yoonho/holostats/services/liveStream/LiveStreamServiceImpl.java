@@ -17,6 +17,7 @@ package com.yoonho.holostats.services.liveStream;
 import com.yoonho.holostats.common.CommonCodes;
 import com.yoonho.holostats.dtos.YoutubeVideoDto;
 import com.yoonho.holostats.dtos.request.GetLiveStreamRequestDto;
+import com.yoonho.holostats.dtos.response.GetLiveStreamResponseDto;
 import com.yoonho.holostats.models.Channel;
 import com.yoonho.holostats.models.liveStream.LiveStream;
 import com.yoonho.holostats.models.liveStream.LiveStreamStatistics;
@@ -137,6 +138,7 @@ public class LiveStreamServiceImpl implements LiveStreamService {
                 liveStream.setGoodCnt(video.getGoodCnt());
                 liveStream.setMaxViewer(0);
                 liveStream.setAvgViewer(0);
+                liveStream.setConcurrentViewer(0);
 
                 liveStreamRepository.upsertLiveStream(liveStream);
 
@@ -264,7 +266,10 @@ public class LiveStreamServiceImpl implements LiveStreamService {
     }
 
     @Override
-    public List<LiveStream> getLiveStream(GetLiveStreamRequestDto getLiveStreamRequestDto) {
-        return liveStreamRepository.getLiveStream(MAX_RESULT, getLiveStreamRequestDto.getDate());
+    public List<GetLiveStreamResponseDto> getLiveStream(GetLiveStreamRequestDto getLiveStreamRequestDto) {
+        return liveStreamRepository
+                .getLiveStream(MAX_RESULT, getLiveStreamRequestDto.getDate())
+                .stream().map(liveStream -> new GetLiveStreamResponseDto(liveStream))
+                .toList();
     }
 }
