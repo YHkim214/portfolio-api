@@ -74,13 +74,13 @@
         ON
             TL.CHANNEL_ID = TC.CHANNEL_ID
         WHERE 1=1
-        AND (LS_STATUS = 'UPCOMING' OR LS_STATUS = 'LIVE')
+#         AND (LS_STATUS = 'UPCOMING' OR LS_STATUS = 'LIVE')
         <if test="date != null and date != ''">
             AND
             DATE(TL.START_TIME) = #{date}
         </if>
         ORDER BY
-            MAX_VIEWER DESC
+            START_TIME ASC
         LIMIT #{maxResult}
     </select>
 

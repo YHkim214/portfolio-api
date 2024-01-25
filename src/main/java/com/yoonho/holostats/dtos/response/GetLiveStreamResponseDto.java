@@ -41,6 +41,7 @@ public class GetLiveStreamResponseDto {
     private String lsYtThumbnail;
     private String startTime;
     private String endTime;
+    private String lsStatus;
     private Integer maxViewer;
     private Integer avgViewer;
     private Integer concurrentViewer;
@@ -63,6 +64,7 @@ public class GetLiveStreamResponseDto {
         this.endTime = liveStream.getEndTime() == null ? "" : LocalDateTime
                 .ofInstant(Instant.ofEpochMilli(liveStream.getEndTime().getTime()), TimeZone.getDefault().toZoneId())
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        this.lsStatus = liveStream.getLsStatus();
         this.maxViewer = liveStream.getMaxViewer();
         this.avgViewer = liveStream.getAvgViewer();
         this.concurrentViewer = liveStream.getConcurrentViewer();

@@ -14,6 +14,7 @@
 
 package com.yoonho.holostats.dtos.request;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
@@ -28,6 +29,7 @@ import lombok.Data;
  * 1/22/24        kim-yoonho       최초 생성
  */
 @Data
+@AllArgsConstructor
 public class GetLiveStreamRequestDto {
     private String date; /** YYYY-MM-DD 형식 **/
 }
