@@ -46,6 +46,7 @@ public class LiveStreamController extends CommonController {
         this.liveStreamService = liveStreamService;
     }
 
+    /** 라이브 스트리밍 목록 반환 **/
     @GetMapping("/list")
     public ResponseEntity getLiveStreamList(@RequestParam("date") String date) {
         List<GetLiveStreamResponseDto> liveStreamList = liveStreamService.getLiveStream(new GetLiveStreamRequestDto(date));

@@ -61,4 +61,8 @@ public class StringUtil {
         return string == null || string.isEmpty() || string.isBlank();
     }
 
+    public static String processRequestAccessToken(String requestAccessToken) {
+        return requestAccessToken.substring(7, requestAccessToken.length());
+    }
+
 }

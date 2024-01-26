@@ -14,7 +14,10 @@
 
 package com.yoonho.holostats.services.member;
 
+import com.yoonho.holostats.dtos.request.ChangeNicknameRequestDto;
+import com.yoonho.holostats.dtos.request.ChangePasswordDto;
 import com.yoonho.holostats.dtos.request.RegisterMemberRequestDto;
+import com.yoonho.holostats.dtos.response.ChangeNicknameResponseDto;
 import com.yoonho.holostats.dtos.response.GetMemberInfoResponseDto;
 
 import java.io.IOException;
@@ -34,5 +37,7 @@ public interface MemberService {
 
     void registerMember(RegisterMemberRequestDto registerMemberRequestDto) throws IOException;
     GetMemberInfoResponseDto getMemberByName(String memberName);
+    ChangeNicknameResponseDto changeNickname(String memberName, ChangeNicknameRequestDto changeNicknameRequestDto);
+    void changePassword(String memberName, ChangePasswordDto changePasswordDto);
 
 }

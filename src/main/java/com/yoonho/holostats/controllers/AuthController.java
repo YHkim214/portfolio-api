@@ -39,6 +39,7 @@ public class AuthController extends CommonController {
         this.authService = authService;
     }
 
+    /** 회원가입 **/
     @PostMapping(value = "/register", consumes = "multipart/form-data")
     @ResponseBody
     public ResponseEntity register(@ModelAttribute RegisterMemberRequestDto registerMemberRequestDto) throws IOException {
@@ -48,6 +49,7 @@ public class AuthController extends CommonController {
         return ResponseEntityWrapper.success(null);
     }
 
+    /** 로그인 **/
     @PostMapping("/login")
     @ResponseBody
     public ResponseEntity login(@RequestBody LoginRequestDto loginRequestDto) {
@@ -57,6 +59,7 @@ public class AuthController extends CommonController {
         return ResponseEntityWrapper.success(loginResponseDto);
     }
 
+    /** JWT토큰 리프레쉬 **/
     @PostMapping("/refresh")
     @ResponseBody
     public ResponseEntity refresh(@RequestBody RefreshRequestDto refreshRequestDto) throws JsonProcessingException {

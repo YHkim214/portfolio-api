@@ -3,13 +3,14 @@ package com.yoonho.holostats.controllers;
 import com.yoonho.holostats.common.CommonController;
 import com.yoonho.holostats.common.ResponseEntityWrapper;
 import com.yoonho.holostats.configs.security.JwtGenerator;
+import com.yoonho.holostats.dtos.request.ChangeNicknameRequestDto;
+import com.yoonho.holostats.dtos.request.ChangePasswordDto;
+import com.yoonho.holostats.dtos.response.ChangeNicknameResponseDto;
 import com.yoonho.holostats.dtos.response.GetMemberInfoResponseDto;
 import com.yoonho.holostats.services.member.MemberService;
+import com.yoonho.holostats.utils.StringUtil;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * packageName    : com.yoonho.holostats.controllers
@@ -35,12 +36,32 @@ public class MemberController extends CommonController {
         this.memberService = memberService;
     }
 
+    /** 회원정보 반환 **/
     @GetMapping("/getMemberInfo")
     public ResponseEntity getMemberInfo(@RequestHeader("Authorization") String accessToken) {
-        String userName = jwtGenerator.getUserName(accessToken.substring(7, accessToken.length()));
+        String userName = jwtGenerator.getUserName(StringUtil.processRequestAccessToken(accessToken));
         GetMemberInfoResponseDto getMemberInfoResponseDto = memberService.getMemberByName(userName);
 
         return ResponseEntityWrapper.success(getMemberInfoResponseDto);
+    }
+
+    /** 닉네임 변경 **/
+    @PostMapping("/changeNickname")
+    public ResponseEntity changeNickname(@RequestHeader("Authorization") String accessToken,
+                                         @RequestBody ChangeNicknameRequestDto changeNicknameRequestDto) {
+        String userName = jwtGenerator.getUserName(StringUtil.processRequestAccessToken(accessToken));
+        ChangeNicknameResponseDto changeNicknameResponseDto = memberService.changeNickname(userName, changeNicknameRequestDto);
+
+        return ResponseEntityWrapper.success(changeNicknameResponseDto);
+    }
+
+    @PostMapping("/changePassword")
+    public ResponseEntity changePassword(@RequestHeader("Authorization") String accessToken,
+                                         @RequestBody ChangePasswordDto changePasswordDto) {
+        String userName = jwtGenerator.getUserName(StringUtil.processRequestAccessToken(accessToken));
+        memberService.changePassword(userName, changePasswordDto);
+
+        return ResponseEntityWrapper.success(null);
     }
 
 }

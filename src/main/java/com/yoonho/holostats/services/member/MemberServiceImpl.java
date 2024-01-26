@@ -15,7 +15,10 @@
 package com.yoonho.holostats.services.member;
 
 import com.yoonho.holostats.common.CommonCodes;
+import com.yoonho.holostats.dtos.request.ChangeNicknameRequestDto;
+import com.yoonho.holostats.dtos.request.ChangePasswordDto;
 import com.yoonho.holostats.dtos.request.RegisterMemberRequestDto;
+import com.yoonho.holostats.dtos.response.ChangeNicknameResponseDto;
 import com.yoonho.holostats.dtos.response.GetMemberInfoResponseDto;
 import com.yoonho.holostats.exceptions.ApiException;
 import com.yoonho.holostats.models.DbFile;
@@ -92,23 +95,50 @@ public class MemberServiceImpl implements MemberService {
             member.setMemberThumbnailId(dbFile.getFileId());
             memberRepository.updateMember(member);
         }
-
     }
 
     @Override
     public GetMemberInfoResponseDto getMemberByName(String memberName) {
-        Optional<Member> member = memberRepository.getMemberByName(memberName);
+        Member member = memberRepository.getMemberByName(memberName)
+                .orElseThrow(() -> new ApiException(999, "회원정보가 존재하지 않습니다."));
 
-        if(member.isPresent()) {
-            GetMemberInfoResponseDto getMemberInfoDto = new GetMemberInfoResponseDto();
-            getMemberInfoDto.setMemberId(member.get().getMemberId());
-            getMemberInfoDto.setMemberName(member.get().getMemberName());
-            getMemberInfoDto.setMemberNickName(member.get().getMemberNickName());
-            getMemberInfoDto.setMemberThumbnailFileUrl(member.get().getMemberThumbnailFile().getFileUrl());
+        GetMemberInfoResponseDto getMemberInfoDto = new GetMemberInfoResponseDto();
+        getMemberInfoDto.setMemberId(member.getMemberId());
+        getMemberInfoDto.setMemberName(member.getMemberName());
+        getMemberInfoDto.setMemberNickName(member.getMemberNickName());
+        getMemberInfoDto.setMemberThumbnailFileUrl(member.getMemberThumbnailFile().getFileUrl());
 
-            return getMemberInfoDto;
+        return getMemberInfoDto;
+    }
+
+    @Override
+    public ChangeNicknameResponseDto changeNickname(String memberName, ChangeNicknameRequestDto changeNicknameRequestDto) {
+        Member member = memberRepository.getMemberByName(memberName)
+                .orElseThrow(() -> new ApiException(999, "회원정보가 존재하지 않습니다."));
+
+        //이전 닉네임과 비교해서 검증
+        if(!member.getMemberNickName().equals(changeNicknameRequestDto.getPrevNickname())) {
+            throw new ApiException(999, "회원정보가 일치하지 않습니다.");
         }
 
-        return null;
+        member.setMemberNickName(changeNicknameRequestDto.getNewNickname());
+
+        memberRepository.updateMember(member);
+
+        return new ChangeNicknameResponseDto(changeNicknameRequestDto.getNewNickname());
+    }
+
+    @Override
+    public void changePassword(String memberName, ChangePasswordDto changePasswordDto) {
+        Member member = memberRepository.getMemberByName(memberName)
+                .orElseThrow(() -> new ApiException(999, "회원정보가 존재하지 않습니다."));
+
+        if(!passwordEncoder.encode(changePasswordDto.getPrevPassword()).equals(member.getMemberPassword())) {
+            throw new ApiException(999, "회원정보가 일치하지 않습니다.");
+        }
+
+        member.setMemberPassword(passwordEncoder.encode(changePasswordDto.getNewPassword()));
+
+        memberRepository.updateMember(member);
     }
 }
