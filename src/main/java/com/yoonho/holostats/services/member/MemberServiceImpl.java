@@ -16,7 +16,7 @@ package com.yoonho.holostats.services.member;
 
 import com.yoonho.holostats.common.CommonCodes;
 import com.yoonho.holostats.dtos.request.ChangeNicknameRequestDto;
-import com.yoonho.holostats.dtos.request.ChangePasswordDto;
+import com.yoonho.holostats.dtos.request.ChangePasswordRequestDto;
 import com.yoonho.holostats.dtos.request.RegisterMemberRequestDto;
 import com.yoonho.holostats.dtos.response.ChangeNicknameResponseDto;
 import com.yoonho.holostats.dtos.response.GetMemberInfoResponseDto;
@@ -116,11 +116,6 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberRepository.getMemberByName(memberName)
                 .orElseThrow(() -> new ApiException(999, "회원정보가 존재하지 않습니다."));
 
-        //이전 닉네임과 비교해서 검증
-        if(!member.getMemberNickName().equals(changeNicknameRequestDto.getPrevNickname())) {
-            throw new ApiException(999, "회원정보가 일치하지 않습니다.");
-        }
-
         member.setMemberNickName(changeNicknameRequestDto.getNewNickname());
 
         memberRepository.updateMember(member);
@@ -129,15 +124,19 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void changePassword(String memberName, ChangePasswordDto changePasswordDto) {
+    public void changePassword(String memberName, ChangePasswordRequestDto changePasswordRequestDto) {
+        System.out.println(passwordEncoder.encode(changePasswordRequestDto.getPrevPassword()));
+
         Member member = memberRepository.getMemberByName(memberName)
                 .orElseThrow(() -> new ApiException(999, "회원정보가 존재하지 않습니다."));
 
-        if(!passwordEncoder.encode(changePasswordDto.getPrevPassword()).equals(member.getMemberPassword())) {
+        System.out.println(member.getMemberPassword());
+
+        if(!passwordEncoder.matches(changePasswordRequestDto.getPrevPassword(), member.getMemberPassword())) {
             throw new ApiException(999, "회원정보가 일치하지 않습니다.");
         }
 
-        member.setMemberPassword(passwordEncoder.encode(changePasswordDto.getNewPassword()));
+        member.setMemberPassword(passwordEncoder.encode(changePasswordRequestDto.getNewPassword()));
 
         memberRepository.updateMember(member);
     }

@@ -29,6 +29,5 @@ import lombok.Data;
  */
 @Data
 public class ChangeNicknameRequestDto {
-    private String prevNickname;
     private String newNickname;
 }

@@ -4,7 +4,7 @@ import com.yoonho.holostats.common.CommonController;
 import com.yoonho.holostats.common.ResponseEntityWrapper;
 import com.yoonho.holostats.configs.security.JwtGenerator;
 import com.yoonho.holostats.dtos.request.ChangeNicknameRequestDto;
-import com.yoonho.holostats.dtos.request.ChangePasswordDto;
+import com.yoonho.holostats.dtos.request.ChangePasswordRequestDto;
 import com.yoonho.holostats.dtos.response.ChangeNicknameResponseDto;
 import com.yoonho.holostats.dtos.response.GetMemberInfoResponseDto;
 import com.yoonho.holostats.services.member.MemberService;
@@ -57,9 +57,9 @@ public class MemberController extends CommonController {
 
     @PostMapping("/changePassword")
     public ResponseEntity changePassword(@RequestHeader("Authorization") String accessToken,
-                                         @RequestBody ChangePasswordDto changePasswordDto) {
+                                         @RequestBody ChangePasswordRequestDto changePasswordRequestDto) {
         String userName = jwtGenerator.getUserName(StringUtil.processRequestAccessToken(accessToken));
-        memberService.changePassword(userName, changePasswordDto);
+        memberService.changePassword(userName, changePasswordRequestDto);
 
         return ResponseEntityWrapper.success(null);
     }

@@ -30,6 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.*;
 
 /**
@@ -255,10 +256,14 @@ public class LiveStreamServiceImpl implements LiveStreamService {
             List<YoutubeVideoDto> videoInfoList = youtubeService
                     .getVideoInfo(endedLiveStream.stream().map(liveStream -> liveStream.getLsYtId()).toList());
 
-            videoInfoList.forEach(video -> {
-                LiveStream liveStream = endedLiveStream.stream().filter(ls -> ls.getLsYtId().equals(video.getId())).toList().get(0);
+            endedLiveStream.forEach(liveStream -> {
+                List<YoutubeVideoDto> youtubeVideoDtoList = videoInfoList.stream().filter(videoInfo -> videoInfo.getId().equals(liveStream.getLsYtId())).toList();
 
-                liveStream.setEndTime(video.getActualEndTime());
+                if(CollectionUtil.isNullOrEmpty(youtubeVideoDtoList)) {
+                    liveStream.setEndTime(new Timestamp(System.currentTimeMillis()));
+                } else {
+                    liveStream.setEndTime(youtubeVideoDtoList.get(0).getActualEndTime());
+                }
 
                 liveStreamRepository.upsertLiveStream(liveStream);
             });

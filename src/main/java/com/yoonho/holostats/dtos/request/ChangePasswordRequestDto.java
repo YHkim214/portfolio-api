@@ -28,7 +28,7 @@ import lombok.Data;
  * 1/26/24        kim-yoonho       최초 생성
  */
 @Data
-public class ChangePasswordDto {
+public class ChangePasswordRequestDto {
     private String prevPassword;
     private String newPassword;
 }
