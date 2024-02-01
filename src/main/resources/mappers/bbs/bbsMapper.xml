@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yoonho.holostats.repositories.BbsRepository">
+
+    <insert id="insertBbs" parameterType="com.yoonho.holostats.models.Bbs">
+        INSERT INTO TB_BBS (
+                            BBS_ID,
+                            MEMBER_ID,
+                            LS_ID,
+                            BBS_CONTENT,
+                            BBS_GOOD_CNT,
+                            BBS_TYPE,
+                            BBS_PARENT_ID,
+                            BBS_STATUS
+        )
+        VALUES (
+                   #{bbs.bbsId},
+                   #{bbs.memberId},
+                   #{bbs.lsId},
+                   #{bbs.bbsContent},
+                   #{bbs.goodCnt},
+                   #{bbs.bbsType},
+                   #{bbs.parentId},
+                   #{bbs.status}
+        )
+    </insert>
+
+    <select id="getBbsByLsId" resultMap="bbsResult">
+        <include refid="bbs"/>
+        WHERE 1 = 1
+        AND TB.LS_ID = #{lsId}
+        ORDER BY TB.CREATE_TIME DESC
+        <if test="pageInfo != null">
+            LIMIT #{pageInfo.start}, #{pageInfo.size}
+        </if>
+
+    </select>
+
+    <resultMap id="bbsResult" type="com.yoonho.holostats.models.Bbs">
+        <id property="bbsId" column="bbsId"/>
+        <result property="memberId" column="memberId"/>
+        <result property="lsId" column="lsId"/>
+        <result property="bbsContent" column="bbsContent"/>
+        <result property="bbsGoodCnt" column="bbsGoodCnt"/>
+        <result property="bbsType" column="bbsType"/>
+        <result property="bbsParentId" column="bbsParentId"/>
+        <result property="bbsStatus" column="bbsStatus"/>
+        <result property="createTime" column="createTime"/>
+        <result property="updateTime" column="updateTime"/>
+        <association property="member" column="tm_memberId" javaType="com.yoonho.holostats.models.Member" resultMap="memberResult"/>
+        <association property="liveStream" column="tl_lsId" javaType="com.yoonho.holostats.models.liveStream.LiveStream" resultMap="lsResult"/>
+    </resultMap>
+
+    <resultMap id="bbsChildResult" type="com.yoonho.holostats.models.Bbs">
+        <id property="bbsId" column="tb2_bbsId"/>
+        <result property="memberId" column="tb2_memberId"/>
+        <result property="lsId" column="tb2_lsId"/>
+        <result property="bbsContent" column="tb2_bbsContent"/>
+        <result property="bbsGoodCnt" column="tb2_bbsGoodCnt"/>
+        <result property="bbsType" column="tb2_bbsType"/>
+        <result property="bbsParentId" column="tb2_bbsParentId"/>
+        <result property="bbsStatus" column="tb2_bbsStatus"/>
+        <result property="createTime" column="tb2_createTime"/>
+        <result property="updateTime" column="tb2_updateTime"/>
+        <association property="member" column="tm2_memberId" javaType="com.yoonho.holostats.models.Member" resultMap="memberResult2"/>
+    </resultMap>
+
+    <resultMap id="memberResult" type="com.yoonho.holostats.models.Member">
+        <id property="memberId" column="tm_memberId"/>
+        <result property="memberNickName" column="tm_memberNickName"/>
+    </resultMap>
+
+    <resultMap id="memberResult2" type="com.yoonho.holostats.models.Member">
+        <id property="memberId" column="tm2_memberId"/>
+        <result property="memberNickName" column="tm2_memberNickName"/>
+    </resultMap>
+
+    <resultMap id="lsResult" type="com.yoonho.holostats.models.liveStream.LiveStream">
+        <id property="lsId" column="tl_lsId"/>
+        <result property="lsName" column="tl_lsName"/>
+        <result property="lsYtThumbnail" column="tl_lsYtThumbnail"/>
+    </resultMap>
+
+    <sql id="bbs">
+        SELECT
+            TB.BBS_ID               AS bbsId,
+            TB.MEMBER_ID            AS memberId,
+            TB.LS_ID                AS lsId,
+            TB.BBS_CONTENT          AS bbsContent,
+            TB.BBS_GOOD_CNT         AS bbsGoodCnt,
+            TB.BBS_TYPE             AS bbsType,
+            TB.BBS_PARENT_ID        AS bbsParentId,
+            TB.BBS_STATUS           AS bbsStatus,
+            TB.CREATE_TIME          AS createTime,
+            TB.UPDATE_TIME          AS updateTime,
+
+            TM.MEMBER_ID            AS tm_memberId,
+            TM.MEMBER_NICKNAME      AS tm_memberNickname,
+
+            TL.LS_ID                AS tl_lsId,
+            TL.LS_NAME              AS tl_lsName,
+            TL.LS_YT_THUMBNAIL      AS tl_lsYtThumbnail,
+
+            TB2.BBS_ID               AS tb2_bbsId,
+            TB2.MEMBER_ID            AS tb2_memberId,
+            TB2.LS_ID                AS tb2_lsId,
+            TB2.BBS_CONTENT          AS tb2_bbsContent,
+            TB2.BBS_GOOD_CNT         AS tb2_bbsGoodCnt,
+            TB2.BBS_TYPE             AS tb2_bbsType,
+            TB2.BBS_PARENT_ID        AS tb2_bbsParentId,
+            TB2.BBS_STATUS           AS tb2_bbsStatus,
+            TB2.CREATE_TIME          AS tb2_createTime,
+            TB2.UPDATE_TIME          AS tb2_updateTime,
+
+            TM2.MEMBER_ID            AS tm2_memberId,
+            TM2.MEMBER_NICKNAME      AS tm2_memberNickname
+        FROM TB_BBS AS TB
+        LEFT JOIN TB_MEMBER AS TM ON TB.MEMBER_ID = TM.MEMBER_ID
+        LEFT JOIN TB_LS AS TL ON TB.LS_ID = TL.LS_ID
+        LEFT JOIN TB_BBS AS TB2 ON TB.BBS_PARENT_ID = TB2.BBS_ID
+        LEFT JOIN TB_MEMBER TM2 ON TB2.MEMBER_ID = TM2.MEMBER_ID
+    </sql>
+
+</mapper>
