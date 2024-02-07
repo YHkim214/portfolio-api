@@ -48,10 +48,16 @@ public class LiveStreamController extends CommonController {
 
     /** 라이브 스트리밍 목록 반환 **/
     @GetMapping("/list")
-    public ResponseEntity getLiveStreamList(@RequestParam("date") String date) {
-        List<GetLiveStreamResponseDto> liveStreamList = liveStreamService.getLiveStream(new GetLiveStreamRequestDto(date));
+    public ResponseEntity<?> getLiveStreamList(@RequestParam("date") String date) {
+        List<GetLiveStreamResponseDto> liveStreamList = liveStreamService.getLiveStreamList(new GetLiveStreamRequestDto(date));
 
         return ResponseEntityWrapper.success(liveStreamList);
+    }
+
+    @GetMapping("/{lsId}")
+    public ResponseEntity<?> getLiveStream(@PathVariable("lsId") Integer lsId) {
+        GetLiveStreamResponseDto getLiveStreamResponseDto = liveStreamService.getLiveStreamById(lsId);
+        return ResponseEntityWrapper.success(getLiveStreamResponseDto);
     }
 
 }

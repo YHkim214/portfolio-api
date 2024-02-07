@@ -36,5 +36,6 @@ public interface LiveStreamService {
     void updateLiveStreamStatistics() throws IOException;
     void checkUpcomingLiveStream() throws IOException;
     void cleanUpLiveStream() throws IOException;
-    List<GetLiveStreamResponseDto> getLiveStream(GetLiveStreamRequestDto getLiveStreamRequestDto);
+    List<GetLiveStreamResponseDto> getLiveStreamList(GetLiveStreamRequestDto getLiveStreamRequestDto);
+    GetLiveStreamResponseDto getLiveStreamById(Integer lsId);
 }

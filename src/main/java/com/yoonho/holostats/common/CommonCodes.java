@@ -12,6 +12,35 @@ package com.yoonho.holostats.common;
  * 12/27/23        kim-yoonho       최초 생성
  */
 public class CommonCodes {
+    public static final class BBS_STATUS {
+        public static final class PUBLIC {
+            public static final String CODE = "PUBLIC";
+            public static final String DESC = "공개";
+            public static final String VAL = "null";
+        }
+        public static final class HIDDEN {
+            public static final String CODE = "HIDDEN";
+            public static final String DESC = "비공개";
+            public static final String VAL = "null";
+        }
+    }
+    public static final class BBS_TYPE {
+        public static final class NORMAL {
+            public static final String CODE = "NORMAL";
+            public static final String DESC = "일반";
+            public static final String VAL = "null";
+        }
+        public static final class REPLY {
+            public static final String CODE = "REPLY";
+            public static final String DESC = "댓글";
+            public static final String VAL = "null";
+        }
+        public static final class NOTICE {
+            public static final String CODE = "NOTICE";
+            public static final String DESC = "공지사항";
+            public static final String VAL = "null";
+        }
+    }
     public static final class CHANNEL_STATUS {
         public static final class ACTIVE {
             public static final String CODE = "ACTIVE";

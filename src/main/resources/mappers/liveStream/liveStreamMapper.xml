@@ -44,35 +44,8 @@
                                 UPDATE_TIME = CURRENT_TIMESTAMP
     </insert>
 
-    <select id="getLiveStream" resultMap="liveStreamResult">
-        SELECT
-            TL.LS_ID            AS lsId,
-            TL.CHANNEL_ID       AS channelId,
-            TL.LS_NAME          AS lsName,
-            TL.LS_YT_ID         AS lsYtId,
-            TL.LS_YT_THUMBNAIL  AS lsYtThumbnail,
-            TL.START_TIME       AS startTime,
-            TL.END_TIME         AS endTime,
-            TL.MAX_VIEWER       AS maxViewer,
-            TL.AVG_VIEWER       AS avgViewer,
-            TL.CONCURRENT_VIEWER    AS concurrentViewer,
-            TL.GOOD_CNT         AS goodCnt,
-            TL.LS_STATUS        AS lsStatus,
-            TL.CREATE_TIME      AS createTime,
-            TL.UPDATE_TIME      AS updateTime,
-
-            TC.CHANNEL_ID           AS tc_channelId,
-            TC.CHANNEL_NAME         AS tc_channelName,
-            TC.CHANNEL_YT_THUMBNAIL AS tc_channelYtThumbnail,
-            TC.CHANNEL_YT_NAME      AS tc_channelYtName,
-            TC.CHANNEL_YT_ID        AS tc_channelYtId
-
-        FROM
-            TB_LS AS TL
-        LEFT JOIN
-            TB_CHANNEL AS TC
-        ON
-            TL.CHANNEL_ID = TC.CHANNEL_ID
+    <select id="getLiveStreamList" resultMap="liveStreamResult">
+        <include refid="liveStream"/>
         WHERE 1=1
 #         AND (LS_STATUS = 'UPCOMING' OR LS_STATUS = 'LIVE')
         <if test="date != null and date != ''">
@@ -82,6 +55,30 @@
         ORDER BY
             START_TIME ASC
         LIMIT #{maxResult}
+    </select>
+
+    <select id="getLiveStreamByStatus" resultMap="liveStreamResult">
+        <include refid="liveStream"/>
+        WHERE 1=1
+        <if test="lsStatus != null and lsStatus != ''">
+            AND
+            TL.LS_STATUS = #{lsStatus}
+        </if>
+
+    </select>
+
+    <select id="getLiveStreamByYtId" resultMap="liveStreamResult">
+        <include refid="liveStream"/>
+        WHERE 1=1
+          AND
+            TL.LS_YT_ID = #{lsYtId}
+    </select>
+
+    <select id="getLiveStreamById" resultMap="liveStreamResult">
+        <include refid="liveStream"/>
+        WHERE 1=1
+        AND
+        TL.LS_ID = #{lsId}
     </select>
 
     <resultMap id="liveStreamResult" type="com.yoonho.holostats.models.liveStream.LiveStream">
@@ -110,52 +107,34 @@
         <result property="channelYtId" column="tc_channelYtId"/>
     </resultMap>
 
-    <select id="getLiveStreamByStatus" resultType="com.yoonho.holostats.models.liveStream.LiveStream">
+    <sql id="liveStream">
         SELECT
-            LS_ID            AS lsId,
-            CHANNEL_ID       AS channelId,
-            LS_NAME          AS lsName,
-            LS_YT_ID         AS lsYtId,
-            LS_YT_THUMBNAIL  AS lsYtThumbnail,
-            START_TIME       AS startTime,
-            END_TIME         AS endTime,
-            MAX_VIEWER       AS maxViewer,
-            AVG_VIEWER       AS avgViewer,
-            CONCURRENT_VIEWER   AS concurrentViewer,
-            GOOD_CNT         AS goodCnt,
-            LS_STATUS        AS lsStatus,
-            CREATE_TIME      AS createTime,
-            UPDATE_TIME      AS updateTime
-        FROM
-            TB_LS
-        WHERE 1=1
-        <if test="lsStatus != null and lsStatus != ''">
-            AND
-            LS_STATUS = #{lsStatus}
-        </if>
+            TL.LS_ID            AS lsId,
+            TL.CHANNEL_ID       AS channelId,
+            TL.LS_NAME          AS lsName,
+            TL.LS_YT_ID         AS lsYtId,
+            TL.LS_YT_THUMBNAIL  AS lsYtThumbnail,
+            TL.START_TIME       AS startTime,
+            TL.END_TIME         AS endTime,
+            TL.MAX_VIEWER       AS maxViewer,
+            TL.AVG_VIEWER       AS avgViewer,
+            TL.CONCURRENT_VIEWER    AS concurrentViewer,
+            TL.GOOD_CNT         AS goodCnt,
+            TL.LS_STATUS        AS lsStatus,
+            TL.CREATE_TIME      AS createTime,
+            TL.UPDATE_TIME      AS updateTime,
 
-    </select>
-
-    <select id="getLiveStreamByYtId" resultType="com.yoonho.holostats.models.liveStream.LiveStream">
-        SELECT
-            LS_ID            AS lsId,
-            CHANNEL_ID       AS channelId,
-            LS_NAME          AS lsName,
-            LS_YT_ID         AS lsYtId,
-            LS_YT_THUMBNAIL  AS lsYtThumbnail,
-            START_TIME       AS startTime,
-            END_TIME         AS endTime,
-            MAX_VIEWER       AS maxViewer,
-            AVG_VIEWER       AS avgViewer,
-            CONCURRENT_VIEWER AS concurrentViewer,
-            GOOD_CNT         AS goodCnt,
-            LS_STATUS        AS lsStatus,
-            CREATE_TIME      AS createTime,
-            UPDATE_TIME      AS updateTime
+            TC.CHANNEL_ID           AS tc_channelId,
+            TC.CHANNEL_NAME         AS tc_channelName,
+            TC.CHANNEL_YT_THUMBNAIL AS tc_channelYtThumbnail,
+            TC.CHANNEL_YT_NAME      AS tc_channelYtName,
+            TC.CHANNEL_YT_ID        AS tc_channelYtId
         FROM
-            TB_LS
-        WHERE 1=1
-          AND
-            LS_YT_ID = #{lsYtId}
-    </select>
+            TB_LS AS TL
+                LEFT JOIN
+            TB_CHANNEL AS TC
+            ON
+                TL.CHANNEL_ID = TC.CHANNEL_ID
+    </sql>
+
 </mapper>

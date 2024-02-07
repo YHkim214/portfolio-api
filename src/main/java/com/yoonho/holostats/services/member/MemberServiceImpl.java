@@ -125,12 +125,8 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void changePassword(String memberName, ChangePasswordRequestDto changePasswordRequestDto) {
-        System.out.println(passwordEncoder.encode(changePasswordRequestDto.getPrevPassword()));
-
         Member member = memberRepository.getMemberByName(memberName)
                 .orElseThrow(() -> new ApiException(999, "회원정보가 존재하지 않습니다."));
-
-        System.out.println(member.getMemberPassword());
 
         if(!passwordEncoder.matches(changePasswordRequestDto.getPrevPassword(), member.getMemberPassword())) {
             throw new ApiException(999, "회원정보가 일치하지 않습니다.");

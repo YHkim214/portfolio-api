@@ -12,26 +12,27 @@
  *
  */
 
-package com.yoonho.holostats.services.bbs;
+package com.yoonho.holostats.dtos.request;
 
-import com.yoonho.holostats.dtos.request.GetBbsListRequestDto;
-import com.yoonho.holostats.dtos.request.InsertBbsRequestDto;
-import com.yoonho.holostats.dtos.response.GetBbsListResponseDto;
+import lombok.Data;
 
 /**
- * packageName    : com.yoonho.holostats.services.bbs
- * fileName       : BbsService
+ * packageName    : com.yoonho.holostats.dtos.request
+ * fileName       : InsertBbsRequestDto
  * author         : kim-yoonho
- * date           : 1/31/24
+ * date           : 2/1/24
  * description    :
  * ===========================================================
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------
- * 1/31/24        kim-yoonho       최초 생성
+ * 2/1/24        kim-yoonho       최초 생성
  */
-public interface BbsService {
-
-    GetBbsListResponseDto getBbsList(GetBbsListRequestDto getBbsListRequestDto);
-    void insertBbs(String memberName, InsertBbsRequestDto insertBbsRequestDto);
-
+@Data
+public class InsertBbsRequestDto {
+    private Integer memberId;
+    private Integer lsId;
+    private String bbsContent;
+    private String bbsType;
+    private Integer bbsParentId;
+    private String bbsStatus;
 }

@@ -174,7 +174,7 @@ public class LiveStreamServiceImpl implements LiveStreamService {
 
             /*라이브 스트림 업데이트*/
             liveStream.setGoodCnt(video.getGoodCnt());
-            if(liveStream.getMaxViewer().intValue() < video.getConcurrentViewers()) {
+            if(liveStream.getMaxViewer() < video.getConcurrentViewers()) {
                 liveStream.setMaxViewer(video.getConcurrentViewers());
             }
 
@@ -271,10 +271,16 @@ public class LiveStreamServiceImpl implements LiveStreamService {
     }
 
     @Override
-    public List<GetLiveStreamResponseDto> getLiveStream(GetLiveStreamRequestDto getLiveStreamRequestDto) {
+    public List<GetLiveStreamResponseDto> getLiveStreamList(GetLiveStreamRequestDto getLiveStreamRequestDto) {
         return liveStreamRepository
-                .getLiveStream(MAX_RESULT, getLiveStreamRequestDto.getDate())
+                .getLiveStreamList(MAX_RESULT, getLiveStreamRequestDto.getDate())
                 .stream().map(liveStream -> new GetLiveStreamResponseDto(liveStream))
                 .toList();
+    }
+
+    @Override
+    public GetLiveStreamResponseDto getLiveStreamById(Integer lsId) {
+        LiveStream liveStream = liveStreamRepository.getLiveStreamById(lsId).orElseThrow();
+        return new GetLiveStreamResponseDto(liveStream);
     }
 }

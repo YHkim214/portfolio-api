@@ -15,14 +15,14 @@
 package com.yoonho.holostats.controllers;
 
 import com.yoonho.holostats.common.ResponseEntityWrapper;
+import com.yoonho.holostats.configs.security.JwtGenerator;
 import com.yoonho.holostats.dtos.request.GetBbsListRequestDto;
+import com.yoonho.holostats.dtos.request.InsertBbsRequestDto;
 import com.yoonho.holostats.dtos.response.GetBbsListResponseDto;
 import com.yoonho.holostats.services.bbs.BbsService;
+import com.yoonho.holostats.utils.StringUtil;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * packageName    : com.yoonho.holostats.controllers
@@ -41,12 +41,26 @@ public class BbsController {
 
     private final BbsService bbsService;
 
-    public BbsController(BbsService bbsService) {
+    private final JwtGenerator jwtGenerator;
+
+    public BbsController(BbsService bbsService, JwtGenerator jwtGenerator) {
         this.bbsService = bbsService;
+        this.jwtGenerator = jwtGenerator;
+    }
+
+    @PostMapping("/insertBbs")
+    public ResponseEntity<?> insertBbs(
+            @RequestHeader("Authorization") String accessToken,
+            @RequestBody InsertBbsRequestDto insertBbsRequestDto) {
+        String userName = jwtGenerator.getUserName(StringUtil.processRequestAccessToken(accessToken));
+
+        bbsService.insertBbs(userName, insertBbsRequestDto);
+
+        return ResponseEntityWrapper.success(null);
     }
 
     @GetMapping("/list")
-    public ResponseEntity getBbsList(@RequestBody GetBbsListRequestDto getBbsListRequestDto) {
+    public ResponseEntity<?> getBbsList(GetBbsListRequestDto getBbsListRequestDto) {
         GetBbsListResponseDto getBbsListResponseDto = bbsService.getBbsList(getBbsListRequestDto);
 
         return ResponseEntityWrapper.success(getBbsListResponseDto);

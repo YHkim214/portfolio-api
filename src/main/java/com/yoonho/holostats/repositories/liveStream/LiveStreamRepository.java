@@ -51,5 +51,6 @@ public interface LiveStreamRepository {
     void upsertLiveStream(@Param("liveStream") LiveStream liveStream);
     List<LiveStream> getLiveStreamByStatus(@Param("lsStatus") String lsStatus);
     Optional<LiveStream> getLiveStreamByYtId(@Param("lsYtId") String lsYtId);
-    List<LiveStream> getLiveStream(@Param("maxResult") Integer maxResult, @Param("date") String date);
+    List<LiveStream> getLiveStreamList(@Param("maxResult") Integer maxResult, @Param("date") String date);
+    Optional<LiveStream> getLiveStreamById(@Param("lsId") Integer lsId);
 }
