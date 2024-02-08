@@ -2,7 +2,7 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.yoonho.holostats.repositories.MemberRepository">
+<mapper namespace="com.yoonho.holoboard.repositories.MemberRepository">
 
     <select id="getMemberById" resultMap="memberResult">
         <include refid="member"/>
@@ -37,7 +37,7 @@
         ON TM.MEMBER_THUMBNAIL_ID = TF.FILE_ID
     </sql>
 
-    <resultMap id="memberResult" type="com.yoonho.holostats.models.Member">
+    <resultMap id="memberResult" type="com.yoonho.holoboard.models.Member">
         <id property="memberId" column="memberId"/>
         <result property="memberName" column="memberName"/>
         <result property="memberNickName" column="memberNickName"/>
@@ -47,15 +47,15 @@
         <result property="memberRole" column="memberRole"/>
         <result property="createTime" column="createTime"/>
         <result property="updateTime" column="updateTime"/>
-        <association property="memberThumbnailFile" column="t_fileId" javaType="com.yoonho.holostats.models.DbFile" resultMap="fileResult"/>
+        <association property="memberThumbnailFile" column="t_fileId" javaType="com.yoonho.holoboard.models.DbFile" resultMap="fileResult"/>
     </resultMap>
 
-    <resultMap id="fileResult" type="com.yoonho.holostats.models.DbFile">
+    <resultMap id="fileResult" type="com.yoonho.holoboard.models.DbFile">
         <id property="fileId" column="t_fileId"/>
         <result property="fileUrl" column="t_fileUrl"/>
     </resultMap>
 
-    <insert id="insertMember" useGeneratedKeys="true" keyProperty="memberId" parameterType="com.yoonho.holostats.models.Member">
+    <insert id="insertMember" useGeneratedKeys="true" keyProperty="memberId" parameterType="com.yoonho.holoboard.models.Member">
         INSERT INTO TB_MEMBER(
             MEMBER_NAME,
             MEMBER_NICKNAME,
@@ -74,7 +74,7 @@
         )
     </insert>
 
-    <update id="updateMember" parameterType="com.yoonho.holostats.models.Member">
+    <update id="updateMember" parameterType="com.yoonho.holoboard.models.Member">
         UPDATE TB_MEMBER
         SET
             MEMBER_THUMBNAIL_ID = #{member.memberThumbnailId},

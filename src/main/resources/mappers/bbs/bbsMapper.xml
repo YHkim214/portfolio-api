@@ -2,9 +2,9 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.yoonho.holostats.repositories.BbsRepository">
+<mapper namespace="com.yoonho.holoboard.repositories.BbsRepository">
 
-    <insert id="insertBbs" parameterType="com.yoonho.holostats.models.Bbs">
+    <insert id="insertBbs" parameterType="com.yoonho.holoboard.models.Bbs">
         INSERT INTO TB_BBS (
                             BBS_ID,
                             MEMBER_ID,
@@ -38,7 +38,7 @@
 
     </select>
 
-    <resultMap id="bbsResult" type="com.yoonho.holostats.models.Bbs">
+    <resultMap id="bbsResult" type="com.yoonho.holoboard.models.Bbs">
         <id property="bbsId" column="bbsId"/>
         <result property="memberId" column="memberId"/>
         <result property="lsId" column="lsId"/>
@@ -49,11 +49,11 @@
         <result property="bbsStatus" column="bbsStatus"/>
         <result property="createTime" column="createTime"/>
         <result property="updateTime" column="updateTime"/>
-        <association property="member" column="tm_memberId" javaType="com.yoonho.holostats.models.Member" resultMap="memberResult"/>
-        <association property="liveStream" column="tl_lsId" javaType="com.yoonho.holostats.models.liveStream.LiveStream" resultMap="lsResult"/>
+        <association property="member" column="tm_memberId" javaType="com.yoonho.holoboard.models.Member" resultMap="memberResult"/>
+        <association property="liveStream" column="tl_lsId" javaType="com.yoonho.holoboard.models.liveStream.LiveStream" resultMap="lsResult"/>
     </resultMap>
 
-    <resultMap id="bbsChildResult" type="com.yoonho.holostats.models.Bbs">
+    <resultMap id="bbsChildResult" type="com.yoonho.holoboard.models.Bbs">
         <id property="bbsId" column="tb2_bbsId"/>
         <result property="memberId" column="tb2_memberId"/>
         <result property="lsId" column="tb2_lsId"/>
@@ -64,20 +64,20 @@
         <result property="bbsStatus" column="tb2_bbsStatus"/>
         <result property="createTime" column="tb2_createTime"/>
         <result property="updateTime" column="tb2_updateTime"/>
-        <association property="member" column="tm2_memberId" javaType="com.yoonho.holostats.models.Member" resultMap="memberResult2"/>
+        <association property="member" column="tm2_memberId" javaType="com.yoonho.holoboard.models.Member" resultMap="memberResult2"/>
     </resultMap>
 
-    <resultMap id="memberResult" type="com.yoonho.holostats.models.Member">
+    <resultMap id="memberResult" type="com.yoonho.holoboard.models.Member">
         <id property="memberId" column="tm_memberId"/>
         <result property="memberNickName" column="tm_memberNickName"/>
     </resultMap>
 
-    <resultMap id="memberResult2" type="com.yoonho.holostats.models.Member">
+    <resultMap id="memberResult2" type="com.yoonho.holoboard.models.Member">
         <id property="memberId" column="tm2_memberId"/>
         <result property="memberNickName" column="tm2_memberNickName"/>
     </resultMap>
 
-    <resultMap id="lsResult" type="com.yoonho.holostats.models.liveStream.LiveStream">
+    <resultMap id="lsResult" type="com.yoonho.holoboard.models.liveStream.LiveStream">
         <id property="lsId" column="tl_lsId"/>
         <result property="lsName" column="tl_lsName"/>
         <result property="lsYtThumbnail" column="tl_lsYtThumbnail"/>

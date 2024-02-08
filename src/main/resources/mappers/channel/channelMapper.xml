@@ -2,7 +2,7 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.yoonho.holostats.repositories.ChannelRepository">
+<mapper namespace="com.yoonho.holoboard.repositories.ChannelRepository">
 
     <insert id="upsertChannels">
         INSERT INTO TB_CHANNEL(CHANNEL_NAME, CHANNEL_YT_ID, CHANNEL_YT_NAME, CHANNEL_YT_THUMBNAIL, CHANNEL_UPLOAD_ID, CHANNEL_STATUS) VALUES
@@ -17,7 +17,7 @@
                                 UPDATE_TIME = CURRENT_TIMESTAMP;
     </insert>
 
-    <select id="getChannelListByStatus" resultType="com.yoonho.holostats.models.Channel">
+    <select id="getChannelListByStatus" resultType="com.yoonho.holoboard.models.Channel">
         SELECT
             CHANNEL_ID              AS channelId,
             CHANNEL_NAME            AS channelName,

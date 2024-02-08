@@ -2,8 +2,8 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.yoonho.holostats.repositories.liveStream.LiveStreamStatisticsRepository">
-    <insert id="insertLiveStreamStatistics" parameterType="com.yoonho.holostats.models.liveStream.LiveStreamStatistics">
+<mapper namespace="com.yoonho.holoboard.repositories.liveStream.LiveStreamStatisticsRepository">
+    <insert id="insertLiveStreamStatistics" parameterType="com.yoonho.holoboard.models.liveStream.LiveStreamStatistics">
         INSERT INTO TB_LS_STATISTICS (
                                       LS_ID,
                                       CONCURRENT_VIEWER

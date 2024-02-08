@@ -2,8 +2,8 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.yoonho.holostats.repositories.liveStream.LiveStreamRepository">
-    <insert id="upsertLiveStream" parameterType="com.yoonho.holostats.models.liveStream.LiveStream">
+<mapper namespace="com.yoonho.holoboard.repositories.liveStream.LiveStreamRepository">
+    <insert id="upsertLiveStream" parameterType="com.yoonho.holoboard.models.liveStream.LiveStream">
         INSERT INTO TB_LS (
                            LS_ID,
                            CHANNEL_ID,
@@ -81,7 +81,7 @@
         TL.LS_ID = #{lsId}
     </select>
 
-    <resultMap id="liveStreamResult" type="com.yoonho.holostats.models.liveStream.LiveStream">
+    <resultMap id="liveStreamResult" type="com.yoonho.holoboard.models.liveStream.LiveStream">
         <id property="lsId" column="lsId"/>
         <result property="channelId" column="channelId"/>
         <result property="lsName" column="lsName"/>
@@ -96,10 +96,10 @@
         <result property="lsStatus" column="lsStatus"/>
         <result property="createTime" column="createTime"/>
         <result property="updateTime" column="updateTime"/>
-        <association property="channel" column="tc_channelId" javaType="com.yoonho.holostats.models.Channel" resultMap="channelResult"/>
+        <association property="channel" column="tc_channelId" javaType="com.yoonho.holoboard.models.Channel" resultMap="channelResult"/>
     </resultMap>
 
-    <resultMap id="channelResult" type="com.yoonho.holostats.models.Channel">
+    <resultMap id="channelResult" type="com.yoonho.holoboard.models.Channel">
         <id property="channelId" column="tc_channelId"/>
         <result property="channelName" column="tc_channelName"/>
         <result property="channelYtThumbnail" column="tc_channelYtThumbnail"/>

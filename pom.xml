@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.yoonho</groupId>
-    <artifactId>holoStats-api</artifactId>
+    <artifactId>holoBoard-api</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>holoStats</name>
     <description>holoStats</description>
