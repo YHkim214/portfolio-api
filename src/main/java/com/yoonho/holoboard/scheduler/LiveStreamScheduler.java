@@ -17,6 +17,7 @@ package com.yoonho.holoboard.scheduler;
 import com.yoonho.holoboard.services.liveStream.LiveStreamService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
@@ -32,7 +33,7 @@ import java.io.IOException;
  * 1/19/24        kim-yoonho       최초 생성
  */
 
-//@Component
+@Component
 @Slf4j
 public class LiveStreamScheduler {
 
