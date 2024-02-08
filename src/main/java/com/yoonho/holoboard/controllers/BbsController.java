@@ -18,6 +18,7 @@ import com.yoonho.holoboard.common.ResponseEntityWrapper;
 import com.yoonho.holoboard.configs.security.JwtGenerator;
 import com.yoonho.holoboard.dtos.request.GetBbsListRequestDto;
 import com.yoonho.holoboard.dtos.request.InsertBbsRequestDto;
+import com.yoonho.holoboard.dtos.request.RecommendRequestDto;
 import com.yoonho.holoboard.dtos.response.GetBbsListResponseDto;
 import com.yoonho.holoboard.services.bbs.BbsService;
 import com.yoonho.holoboard.utils.StringUtil;
@@ -48,7 +49,7 @@ public class BbsController {
         this.jwtGenerator = jwtGenerator;
     }
 
-    @PostMapping("/insertBbs")
+    @PostMapping("/insert")
     public ResponseEntity<?> insertBbs(
             @RequestHeader("Authorization") String accessToken,
             @RequestBody InsertBbsRequestDto insertBbsRequestDto) {
@@ -59,11 +60,32 @@ public class BbsController {
         return ResponseEntityWrapper.success(null);
     }
 
-    @GetMapping("/list")
-    public ResponseEntity<?> getBbsList(GetBbsListRequestDto getBbsListRequestDto) {
-        GetBbsListResponseDto getBbsListResponseDto = bbsService.getBbsList(getBbsListRequestDto);
+    @GetMapping("/list/{lsId}")
+    public ResponseEntity<?> getBbsList(
+            @RequestHeader("Authorization") String accessToken,
+            GetBbsListRequestDto getBbsListRequestDto,
+            @PathVariable("lsId") Integer lsId) {
+        String userName = jwtGenerator.getUserName(StringUtil.processRequestAccessToken(accessToken));
+
+        getBbsListRequestDto.setLsId(lsId);
+
+        GetBbsListResponseDto getBbsListResponseDto = bbsService.getBbsList(userName, getBbsListRequestDto);
 
         return ResponseEntityWrapper.success(getBbsListResponseDto);
+    }
+
+    @GetMapping("/recommend/{bbsId}")
+    public ResponseEntity<?> recommend(
+            @RequestHeader("Authorization") String accessToken,
+            RecommendRequestDto recommendRequestDto,
+            @PathVariable("bbsId") Integer bbsId) {
+        String userName = jwtGenerator.getUserName(StringUtil.processRequestAccessToken(accessToken));
+
+        recommendRequestDto.setBbsId(bbsId);
+
+        bbsService.recommend(userName, recommendRequestDto);
+
+        return ResponseEntityWrapper.success(null);
     }
 
 }

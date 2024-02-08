@@ -10,7 +10,6 @@
                             MEMBER_ID,
                             LS_ID,
                             BBS_CONTENT,
-                            BBS_GOOD_CNT,
                             BBS_TYPE,
                             BBS_PARENT_ID,
                             BBS_STATUS
@@ -20,10 +19,9 @@
                    #{bbs.memberId},
                    #{bbs.lsId},
                    #{bbs.bbsContent},
-                   #{bbs.goodCnt},
                    #{bbs.bbsType},
-                   #{bbs.parentId},
-                   #{bbs.status}
+                   #{bbs.bbsParentId},
+                   #{bbs.bbsStatus}
         )
     </insert>
 
@@ -31,12 +29,20 @@
         <include refid="bbs"/>
         WHERE 1 = 1
         AND TB.LS_ID = #{lsId}
+        AND (TB.BBS_TYPE = 'NORMAL' or TB.BBS_TYPE = 'NOTICE')
         ORDER BY TB.CREATE_TIME DESC
         <if test="pageInfo != null">
             LIMIT #{pageInfo.start}, #{pageInfo.size}
         </if>
-
     </select>
+
+    <insert id="recommend">
+        INSERT INTO TB_BBS_GOOD (BBS_ID, MEMBER_ID) VALUES (#{bbsId}, #{memberId});
+    </insert>
+
+    <delete id="cancelRecommend">
+        DELETE FROM TB_BBS_GOOD WHERE BBS_ID = #{bbsId} AND MEMBER_ID = #{memberId};
+    </delete>
 
     <resultMap id="bbsResult" type="com.yoonho.holoboard.models.Bbs">
         <id property="bbsId" column="bbsId"/>
@@ -49,8 +55,9 @@
         <result property="bbsStatus" column="bbsStatus"/>
         <result property="createTime" column="createTime"/>
         <result property="updateTime" column="updateTime"/>
-        <association property="member" column="tm_memberId" javaType="com.yoonho.holoboard.models.Member" resultMap="memberResult"/>
-        <association property="liveStream" column="tl_lsId" javaType="com.yoonho.holoboard.models.liveStream.LiveStream" resultMap="lsResult"/>
+        <result property="isRecommended" column="isRecommended"/>
+        <association property="member" column="tm_memberId" resultMap="memberResult"/>
+        <association property="children" column="tb2_bbsId" resultMap="bbsChildResult"/>
     </resultMap>
 
     <resultMap id="bbsChildResult" type="com.yoonho.holoboard.models.Bbs">
@@ -64,7 +71,8 @@
         <result property="bbsStatus" column="tb2_bbsStatus"/>
         <result property="createTime" column="tb2_createTime"/>
         <result property="updateTime" column="tb2_updateTime"/>
-        <association property="member" column="tm2_memberId" javaType="com.yoonho.holoboard.models.Member" resultMap="memberResult2"/>
+        <result property="isRecommended" column="tb2_isRecommended"/>
+        <association property="member" column="tm2_memberId" resultMap="memberResult2"/>
     </resultMap>
 
     <resultMap id="memberResult" type="com.yoonho.holoboard.models.Member">
@@ -77,49 +85,50 @@
         <result property="memberNickName" column="tm2_memberNickName"/>
     </resultMap>
 
-    <resultMap id="lsResult" type="com.yoonho.holoboard.models.liveStream.LiveStream">
-        <id property="lsId" column="tl_lsId"/>
-        <result property="lsName" column="tl_lsName"/>
-        <result property="lsYtThumbnail" column="tl_lsYtThumbnail"/>
-    </resultMap>
-
     <sql id="bbs">
         SELECT
             TB.BBS_ID               AS bbsId,
             TB.MEMBER_ID            AS memberId,
             TB.LS_ID                AS lsId,
             TB.BBS_CONTENT          AS bbsContent,
-            TB.BBS_GOOD_CNT         AS bbsGoodCnt,
+            (SELECT COUNT(*) FROM TB_BBS_GOOD TBG WHERE TB.BBS_ID = TBG.BBS_ID)
+                                    AS bbsGoodCnt,
             TB.BBS_TYPE             AS bbsType,
             TB.BBS_PARENT_ID        AS bbsParentId,
             TB.BBS_STATUS           AS bbsStatus,
             TB.CREATE_TIME          AS createTime,
             TB.UPDATE_TIME          AS updateTime,
 
+            <if test="memberId != null">
+            (SELECT EXISTS(SELECT * FROM TB_BBS_GOOD TBG WHERE TBG.BBS_ID=TB.BBS_ID AND TBG.MEMBER_ID = #{memberId}))
+                                    AS isRecommended,
+            </if>
+
             TM.MEMBER_ID            AS tm_memberId,
             TM.MEMBER_NICKNAME      AS tm_memberNickname,
-
-            TL.LS_ID                AS tl_lsId,
-            TL.LS_NAME              AS tl_lsName,
-            TL.LS_YT_THUMBNAIL      AS tl_lsYtThumbnail,
 
             TB2.BBS_ID               AS tb2_bbsId,
             TB2.MEMBER_ID            AS tb2_memberId,
             TB2.LS_ID                AS tb2_lsId,
             TB2.BBS_CONTENT          AS tb2_bbsContent,
-            TB2.BBS_GOOD_CNT         AS tb2_bbsGoodCnt,
+            (SELECT COUNT(*) FROM TB_BBS_GOOD TBG WHERE TB2.BBS_ID = TBG.BBS_ID)
+                                     AS tb2_bbsGoodCnt,
             TB2.BBS_TYPE             AS tb2_bbsType,
             TB2.BBS_PARENT_ID        AS tb2_bbsParentId,
             TB2.BBS_STATUS           AS tb2_bbsStatus,
             TB2.CREATE_TIME          AS tb2_createTime,
             TB2.UPDATE_TIME          AS tb2_updateTime,
 
+            <if test="memberId != null">
+            (SELECT EXISTS(SELECT * FROM TB_BBS_GOOD TBG WHERE TBG.BBS_ID = TB2.BBS_ID AND TBG.MEMBER_ID = #{memberId}))
+                                     AS tb2_isRecommended,
+            </if>
+
             TM2.MEMBER_ID            AS tm2_memberId,
             TM2.MEMBER_NICKNAME      AS tm2_memberNickname
         FROM TB_BBS AS TB
         LEFT JOIN TB_MEMBER AS TM ON TB.MEMBER_ID = TM.MEMBER_ID
-        LEFT JOIN TB_LS AS TL ON TB.LS_ID = TL.LS_ID
-        LEFT JOIN TB_BBS AS TB2 ON TB.BBS_PARENT_ID = TB2.BBS_ID
+        LEFT JOIN TB_BBS AS TB2 ON TB.BBS_ID = TB2.BBS_PARENT_ID
         LEFT JOIN TB_MEMBER TM2 ON TB2.MEMBER_ID = TM2.MEMBER_ID
     </sql>
 

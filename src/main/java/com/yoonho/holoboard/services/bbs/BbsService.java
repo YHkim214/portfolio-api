@@ -16,6 +16,7 @@ package com.yoonho.holoboard.services.bbs;
 
 import com.yoonho.holoboard.dtos.request.GetBbsListRequestDto;
 import com.yoonho.holoboard.dtos.request.InsertBbsRequestDto;
+import com.yoonho.holoboard.dtos.request.RecommendRequestDto;
 import com.yoonho.holoboard.dtos.response.GetBbsListResponseDto;
 
 /**
@@ -31,7 +32,9 @@ import com.yoonho.holoboard.dtos.response.GetBbsListResponseDto;
  */
 public interface BbsService {
 
-    GetBbsListResponseDto getBbsList(GetBbsListRequestDto getBbsListRequestDto);
+    GetBbsListResponseDto getBbsList(String memberName, GetBbsListRequestDto getBbsListRequestDto);
     void insertBbs(String memberName, InsertBbsRequestDto insertBbsRequestDto);
+
+    void recommend(String memberName, RecommendRequestDto recommendRequestDto);
 
 }

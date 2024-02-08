@@ -15,6 +15,7 @@
 package com.yoonho.holoboard.dtos.response;
 
 import com.yoonho.holoboard.dtos.BbsDto;
+import com.yoonho.holoboard.models.Bbs;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

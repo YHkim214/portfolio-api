@@ -29,7 +29,9 @@
 package com.yoonho.holoboard.models.liveStream;
 
 import com.yoonho.holoboard.models.Channel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 
@@ -46,6 +48,8 @@ import java.sql.Timestamp;
  */
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class LiveStream {
     private Integer lsId;           /** 라이브 스트리밍 아이디 **/
     private Integer channelId;      /** 채널 아이디 **/

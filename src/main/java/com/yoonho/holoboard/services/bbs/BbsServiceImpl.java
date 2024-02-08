@@ -19,6 +19,7 @@ import com.yoonho.holoboard.common.PageInfo;
 import com.yoonho.holoboard.dtos.BbsDto;
 import com.yoonho.holoboard.dtos.request.GetBbsListRequestDto;
 import com.yoonho.holoboard.dtos.request.InsertBbsRequestDto;
+import com.yoonho.holoboard.dtos.request.RecommendRequestDto;
 import com.yoonho.holoboard.dtos.response.GetBbsListResponseDto;
 import com.yoonho.holoboard.exceptions.ApiException;
 import com.yoonho.holoboard.models.Bbs;
@@ -29,6 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * packageName    : com.yoonho.holostats.services.bbs
@@ -53,12 +55,17 @@ public class BbsServiceImpl implements BbsService{
     }
 
     @Override
-    public GetBbsListResponseDto getBbsList(GetBbsListRequestDto getBbsListRequestDto) {
+    public GetBbsListResponseDto getBbsList(String memberName, GetBbsListRequestDto getBbsListRequestDto) {
+        Optional<Member> member = memberRepository.getMemberByName(memberName);
+
+        if(member.isPresent()) getBbsListRequestDto.setMemberId(member.get().getMemberId());
+
         List<Bbs> bbsList = bbsRepository
                 .getBbsByLsId(getBbsListRequestDto.getLsId(),
-                        PageInfo.build(getBbsListRequestDto.getPage(), getBbsListRequestDto.getSize()));
+                        PageInfo.build(getBbsListRequestDto.getPage(), getBbsListRequestDto.getSize()),
+                        getBbsListRequestDto.getMemberId());
 
-        return new GetBbsListResponseDto(bbsList.size(), bbsList.stream().map(BbsDto::toBbsDto).toList());
+        return new GetBbsListResponseDto(bbsList.size(), bbsList.stream().map(bbs -> BbsDto.build(bbs)).toList());
     }
 
     @Override
@@ -70,12 +77,23 @@ public class BbsServiceImpl implements BbsService{
         bbs.setMemberId(member.getMemberId());
         bbs.setLsId(insertBbsRequestDto.getLsId());
         bbs.setBbsContent(insertBbsRequestDto.getBbsContent());
-        bbs.setBbsGoodCnt(0);
         bbs.setBbsType(insertBbsRequestDto.getBbsParentId() == null
                 ? CommonCodes.BBS_TYPE.NORMAL.CODE : CommonCodes.BBS_TYPE.REPLY.CODE);
-        bbs.setParentId(insertBbsRequestDto.getBbsParentId());
+        bbs.setBbsParentId(insertBbsRequestDto.getBbsParentId());
         bbs.setBbsStatus(CommonCodes.BBS_STATUS.PUBLIC.CODE);
 
         bbsRepository.insertBbs(bbs);
+    }
+
+    @Override
+    public void recommend(String memberName, RecommendRequestDto recommendRequestDto) {
+        Member member = memberRepository.getMemberByName(memberName)
+                .orElseThrow(() -> new ApiException(999, "회원정보가 존재하지 않습니다."));
+
+        if(recommendRequestDto.isRecommend()) {
+            bbsRepository.recommend(recommendRequestDto.getBbsId(), member.getMemberId());
+        } else {
+            bbsRepository.cancelRecommend(recommendRequestDto.getBbsId(), member.getMemberId());
+        }
     }
 }

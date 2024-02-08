@@ -14,8 +14,10 @@
 
 package com.yoonho.holoboard.models;
 
-import com.google.api.services.youtube.model.LiveStream;
+import com.yoonho.holoboard.models.liveStream.LiveStream;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -33,6 +35,8 @@ import java.util.List;
  */
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Bbs {
     private Integer bbsId;          /** 게시글 아이디 **/
     private Integer memberId;       /** 작성자 아이디 **/
@@ -40,12 +44,13 @@ public class Bbs {
     private String bbsContent;      /** 게시글 내용 **/
     private Integer bbsGoodCnt;     /** 게시글 좋아요 수 **/
     private String bbsType;         /** 게시글 종류 **/
-    private Integer parentId;       /** 댓글 부모 아이디 **/
+    private Integer bbsParentId;    /** 댓글 부모 아이디 **/
     private String bbsStatus;       /** 게시글 상태 **/
     private Timestamp createTime;   /** 게시글 작성시각 **/
     private Timestamp updateTime;   /** 게시글 수정시각 **/
 
     private Member member;
-    private LiveStream liveStream;
     private List<Bbs> children;
+
+    private Boolean isRecommended;
 }

@@ -34,6 +34,8 @@ import java.util.List;
  */
 @Mapper
 public interface BbsRepository {
-    List<Bbs> getBbsByLsId(@Param("lsId") Integer lsId, @Param("pageInfo") PageInfo pageInfo);
+    List<Bbs> getBbsByLsId(@Param("lsId") Integer lsId, @Param("pageInfo") PageInfo pageInfo, @Param("memberId") Integer memberId);
     void insertBbs(@Param("bbs") Bbs bbs);
+    void recommend(@Param("bbsId") Integer bbsId, @Param("memberId") Integer memberId);
+    void cancelRecommend(@Param("bbsId") Integer bbsId, @Param("memberId") Integer memberId);
 }

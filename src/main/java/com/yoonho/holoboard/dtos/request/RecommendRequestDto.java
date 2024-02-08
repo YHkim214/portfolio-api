@@ -17,20 +17,19 @@ package com.yoonho.holoboard.dtos.request;
 import lombok.Data;
 
 /**
- * packageName    : com.yoonho.holostats.dtos.request
- * fileName       : GetBbsRequestDto
+ * packageName    : com.yoonho.holoboard.dtos.request
+ * fileName       : RecommandRequestDto
  * author         : kim-yoonho
- * date           : 2/1/24
+ * date           : 2/8/24
  * description    :
  * ===========================================================
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------
- * 2/1/24        kim-yoonho       최초 생성
+ * 2/8/24        kim-yoonho       최초 생성
  */
 @Data
-public class GetBbsListRequestDto {
-    private Integer lsId;
-    private Integer page = 1;
-    private Integer size = 20;
+public class RecommendRequestDto {
+    private boolean isRecommend;
+    private Integer bbsId;
     private Integer memberId;
 }
