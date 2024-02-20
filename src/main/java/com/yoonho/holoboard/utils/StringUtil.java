@@ -62,6 +62,7 @@ public class StringUtil {
     }
 
     public static String processRequestAccessToken(String requestAccessToken) {
+        if(isNullOrEmpty(requestAccessToken)) return "";
         return requestAccessToken.substring(7, requestAccessToken.length());
     }
 

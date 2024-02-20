@@ -62,10 +62,14 @@ public class BbsController {
 
     @GetMapping("/list/{lsId}")
     public ResponseEntity<?> getBbsList(
-            @RequestHeader("Authorization") String accessToken,
+            @RequestHeader(name = "Authorization", defaultValue = "") String accessToken,
             GetBbsListRequestDto getBbsListRequestDto,
             @PathVariable("lsId") Integer lsId) {
-        String userName = jwtGenerator.getUserName(StringUtil.processRequestAccessToken(accessToken));
+        String userName = "";
+
+        if(!StringUtil.isNullOrEmpty(accessToken)) {
+            userName = jwtGenerator.getUserName(StringUtil.processRequestAccessToken(accessToken));
+        }
 
         getBbsListRequestDto.setLsId(lsId);
 
@@ -79,7 +83,11 @@ public class BbsController {
             @RequestHeader("Authorization") String accessToken,
             RecommendRequestDto recommendRequestDto,
             @PathVariable("bbsId") Integer bbsId) {
-        String userName = jwtGenerator.getUserName(StringUtil.processRequestAccessToken(accessToken));
+        String userName = "";
+
+        if(!StringUtil.isNullOrEmpty(accessToken)) {
+            userName = jwtGenerator.getUserName(StringUtil.processRequestAccessToken(accessToken));
+        }
 
         recommendRequestDto.setBbsId(bbsId);
 
