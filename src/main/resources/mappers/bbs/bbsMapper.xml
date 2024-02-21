@@ -37,7 +37,7 @@
     </select>
 
     <select id="getBbsById" resultMap="bbsResult">
-        <include refid="bbs"/>
+        <include refid="bbs2"/>
         WHERE 1 = 1
         AND TB.BBS_ID = #{bbsId}
     </select>
@@ -144,6 +144,43 @@
 
             TM2.MEMBER_ID            AS tm2_memberId,
             TM2.MEMBER_NICKNAME      AS tm2_memberNickname
+        FROM TB_BBS AS TB
+        LEFT JOIN TB_MEMBER AS TM ON TB.MEMBER_ID = TM.MEMBER_ID
+        LEFT JOIN TB_BBS AS TB2 ON TB.BBS_ID = TB2.BBS_PARENT_ID
+        LEFT JOIN TB_MEMBER TM2 ON TB2.MEMBER_ID = TM2.MEMBER_ID
+    </sql>
+
+    <sql id="bbs2">
+        SELECT
+        TB.BBS_ID               AS bbsId,
+        TB.MEMBER_ID            AS memberId,
+        TB.LS_ID                AS lsId,
+        TB.BBS_CONTENT          AS bbsContent,
+        (SELECT COUNT(*) FROM TB_BBS_GOOD TBG WHERE TB.BBS_ID = TBG.BBS_ID)
+        AS bbsGoodCnt,
+        TB.BBS_TYPE             AS bbsType,
+        TB.BBS_PARENT_ID        AS bbsParentId,
+        TB.BBS_STATUS           AS bbsStatus,
+        TB.CREATE_TIME          AS createTime,
+        TB.UPDATE_TIME          AS updateTime,
+
+        TM.MEMBER_ID            AS tm_memberId,
+        TM.MEMBER_NICKNAME      AS tm_memberNickname,
+
+        TB2.BBS_ID               AS tb2_bbsId,
+        TB2.MEMBER_ID            AS tb2_memberId,
+        TB2.LS_ID                AS tb2_lsId,
+        TB2.BBS_CONTENT          AS tb2_bbsContent,
+        (SELECT COUNT(*) FROM TB_BBS_GOOD TBG WHERE TB2.BBS_ID = TBG.BBS_ID)
+        AS tb2_bbsGoodCnt,
+        TB2.BBS_TYPE             AS tb2_bbsType,
+        TB2.BBS_PARENT_ID        AS tb2_bbsParentId,
+        TB2.BBS_STATUS           AS tb2_bbsStatus,
+        TB2.CREATE_TIME          AS tb2_createTime,
+        TB2.UPDATE_TIME          AS tb2_updateTime,
+
+        TM2.MEMBER_ID            AS tm2_memberId,
+        TM2.MEMBER_NICKNAME      AS tm2_memberNickname
         FROM TB_BBS AS TB
         LEFT JOIN TB_MEMBER AS TM ON TB.MEMBER_ID = TM.MEMBER_ID
         LEFT JOIN TB_BBS AS TB2 ON TB.BBS_ID = TB2.BBS_PARENT_ID

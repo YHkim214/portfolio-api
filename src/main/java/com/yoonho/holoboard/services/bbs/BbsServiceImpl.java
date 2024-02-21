@@ -112,6 +112,6 @@ public class BbsServiceImpl implements BbsService{
         bbsRepository.deleteBbs(deleteBbsRequestDto.getBbsId());
 
         //추천내역 삭제
-        bbsRepository.deleteRecommend(deleteBbsRequestDto.getBbsId());
+        bbsRepository.deleteRecommend(deleteBbsRequestDto.getBbsId(), member.getMemberId());
     }
 }

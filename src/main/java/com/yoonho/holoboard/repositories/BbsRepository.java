@@ -28,5 +28,5 @@ public interface BbsRepository {
     Optional<Bbs> getBbsById(@Param("bbsId") Integer bbsId);
     void updateBbs(@Param("bbsContent") String content, @Param("bbsId") Integer bbsId);
     void deleteBbs(@Param("bbsId") Integer bbsId);
-    void deleteRecommend(@Param("bbsId") Integer bbsId);
+    void deleteRecommend(@Param("bbsId") Integer bbsId, @Param("memberId") Integer memberId);
 }
