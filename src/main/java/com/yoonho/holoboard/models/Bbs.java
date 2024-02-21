@@ -1,20 +1,5 @@
-/*
- * *
- *  *packageName    : ${PACKAGE_NAME}
- *  * fileName       : ${NAME}
- *  * author         : ${USER}
- *  * date           : ${DATE}
- *  * description    :
- *  * ===========================================================
- *  * DATE              AUTHOR             NOTE
- *  * -----------------------------------------------------------
- *  * ${DATE}        ${USER}       최초 생성
- *
- */
-
 package com.yoonho.holoboard.models;
 
-import com.yoonho.holoboard.models.liveStream.LiveStream;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

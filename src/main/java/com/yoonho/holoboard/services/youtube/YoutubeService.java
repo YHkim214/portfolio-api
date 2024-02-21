@@ -1,31 +1,3 @@
-/*
- * *
- *  *packageName    : ${PACKAGE_NAME}
- *  * fileName       : ${NAME}
- *  * author         : ${USER}
- *  * date           : ${DATE}
- *  * description    :
- *  * ===========================================================
- *  * DATE              AUTHOR             NOTE
- *  * -----------------------------------------------------------
- *  * ${DATE}        ${USER}       최초 생성
- *
- */
-
-/*
- * *
- *  *packageName    : ${PACKAGE_NAME}
- *  * fileName       : ${NAME}
- *  * author         : ${USER}
- *  * date           : ${DATE}
- *  * description    :
- *  * ===========================================================
- *  * DATE              AUTHOR             NOTE
- *  * -----------------------------------------------------------
- *  * ${DATE}        ${USER}       최초 생성
- *
- */
-
 package com.yoonho.holoboard.services.youtube;
 
 import com.yoonho.holoboard.dtos.YoutubeChannelDto;

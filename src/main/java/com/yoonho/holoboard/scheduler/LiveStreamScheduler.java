@@ -1,23 +1,8 @@
-/*
- * *
- *  *packageName    : ${PACKAGE_NAME}
- *  * fileName       : ${NAME}
- *  * author         : ${USER}
- *  * date           : ${DATE}
- *  * description    :
- *  * ===========================================================
- *  * DATE              AUTHOR             NOTE
- *  * -----------------------------------------------------------
- *  * ${DATE}        ${USER}       최초 생성
- *
- */
-
 package com.yoonho.holoboard.scheduler;
 
 import com.yoonho.holoboard.services.liveStream.LiveStreamService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
