@@ -16,9 +16,7 @@ package com.yoonho.holoboard.controllers;
 
 import com.yoonho.holoboard.common.ResponseEntityWrapper;
 import com.yoonho.holoboard.configs.security.JwtGenerator;
-import com.yoonho.holoboard.dtos.request.GetBbsListRequestDto;
-import com.yoonho.holoboard.dtos.request.InsertBbsRequestDto;
-import com.yoonho.holoboard.dtos.request.RecommendRequestDto;
+import com.yoonho.holoboard.dtos.request.*;
 import com.yoonho.holoboard.dtos.response.GetBbsListResponseDto;
 import com.yoonho.holoboard.services.bbs.BbsService;
 import com.yoonho.holoboard.utils.StringUtil;
@@ -49,6 +47,7 @@ public class BbsController {
         this.jwtGenerator = jwtGenerator;
     }
 
+    /*게시글 등록*/
     @PostMapping("/insert")
     public ResponseEntity<?> insertBbs(
             @RequestHeader("Authorization") String accessToken,
@@ -60,6 +59,7 @@ public class BbsController {
         return ResponseEntityWrapper.success(null);
     }
 
+    /*게시글 목록 반환*/
     @GetMapping("/list/{lsId}")
     public ResponseEntity<?> getBbsList(
             @RequestHeader(name = "Authorization", defaultValue = "") String accessToken,
@@ -78,6 +78,7 @@ public class BbsController {
         return ResponseEntityWrapper.success(getBbsListResponseDto);
     }
 
+    /*게시글 추천*/
     @GetMapping("/recommend/{bbsId}")
     public ResponseEntity<?> recommend(
             @RequestHeader("Authorization") String accessToken,
@@ -94,6 +95,38 @@ public class BbsController {
         bbsService.recommend(userName, recommendRequestDto);
 
         return ResponseEntityWrapper.success(null);
+    }
+
+
+    @PostMapping("/update")
+    public ResponseEntity<?> update(
+            @RequestHeader("Authorization") String accessToken,
+            @RequestBody UpdateBbsRequestDto updateBbsRequestDto) {
+        String userName = "";
+
+        if(!StringUtil.isNullOrEmpty(accessToken)) {
+            userName = jwtGenerator.getUserName(StringUtil.processRequestAccessToken(accessToken));
+        }
+
+        bbsService.updateBbs(userName, updateBbsRequestDto);
+
+        return  ResponseEntityWrapper.success(null);
+    }
+
+    @PostMapping("/delete")
+    public ResponseEntity<?> delete(
+            @RequestHeader("Authorization") String accessToken,
+            @RequestBody DeleteBbsRequestDto deleteBbsRequestDto
+            ) {
+        String userName = "";
+
+        if(!StringUtil.isNullOrEmpty(accessToken)) {
+            userName = jwtGenerator.getUserName(StringUtil.processRequestAccessToken(accessToken));
+        }
+
+        bbsService.deleteBbs(userName, deleteBbsRequestDto);
+
+        return  ResponseEntityWrapper.success(null);
     }
 
 }

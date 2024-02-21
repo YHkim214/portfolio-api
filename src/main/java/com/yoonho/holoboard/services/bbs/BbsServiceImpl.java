@@ -17,9 +17,7 @@ package com.yoonho.holoboard.services.bbs;
 import com.yoonho.holoboard.common.CommonCodes;
 import com.yoonho.holoboard.common.PageInfo;
 import com.yoonho.holoboard.dtos.BbsDto;
-import com.yoonho.holoboard.dtos.request.GetBbsListRequestDto;
-import com.yoonho.holoboard.dtos.request.InsertBbsRequestDto;
-import com.yoonho.holoboard.dtos.request.RecommendRequestDto;
+import com.yoonho.holoboard.dtos.request.*;
 import com.yoonho.holoboard.dtos.response.GetBbsListResponseDto;
 import com.yoonho.holoboard.exceptions.ApiException;
 import com.yoonho.holoboard.models.Bbs;
@@ -95,5 +93,39 @@ public class BbsServiceImpl implements BbsService{
         } else {
             bbsRepository.cancelRecommend(recommendRequestDto.getBbsId(), member.getMemberId());
         }
+    }
+
+    @Override
+    public void updateBbs(String memberName, UpdateBbsRequestDto updateBbsRequestDto) {
+        Member member = memberRepository.getMemberByName(memberName)
+                .orElseThrow(() -> new ApiException(999, "회원정보가 존재하지 않습니다."));
+
+        Bbs bbsDb = bbsRepository.getBbsById(updateBbsRequestDto.getBbsId())
+                .orElseThrow(() -> new ApiException(999, "게시글 정보가 존재하지 않습니다."));
+
+        if(!bbsDb.getMemberId().equals(member.getMemberId())) {
+            throw new ApiException(999, "본인의 작성글만 수정 가능합니다.");
+        }
+
+        bbsRepository.updateBbs(updateBbsRequestDto.getContent(), updateBbsRequestDto.getBbsId());
+    }
+
+    @Override
+    public void deleteBbs(String memberName, DeleteBbsRequestDto deleteBbsRequestDto) {
+        Member member = memberRepository.getMemberByName(memberName)
+                .orElseThrow(() -> new ApiException(999, "회원정보가 존재하지 않습니다."));
+
+        Bbs bbsDb = bbsRepository.getBbsById(deleteBbsRequestDto.getBbsId())
+                .orElseThrow(() -> new ApiException(999, "게시글 정보가 존재하지 않습니다."));
+
+        if(!bbsDb.getMemberId().equals(member.getMemberId())) {
+            throw new ApiException(999, "본인이 작성한 글만 삭제 가능합니다.");
+        }
+
+        //게시글 삭제
+        bbsRepository.deleteBbs(deleteBbsRequestDto.getBbsId());
+
+        //추천내역 삭제
+        bbsRepository.deleteRecommend(deleteBbsRequestDto.getBbsId());
     }
 }

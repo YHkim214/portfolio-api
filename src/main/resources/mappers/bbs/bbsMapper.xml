@@ -36,6 +36,24 @@
         </if>
     </select>
 
+    <select id="getBbsById" resultMap="bbsResult">
+        <include refid="bbs"/>
+        WHERE 1 = 1
+        AND TB.BBS_ID = #{bbsId}
+    </select>
+
+    <update id="updateBbs">
+        UPDATE TB_BBS SET BBS_CONTENT = #{bbsContent}, UPDATE_TIME = CURRENT_TIMESTAMP WHERE BBS_ID = #{bbsId}
+    </update>
+
+    <delete id="deleteBbs">
+        DELETE FROM TB_BBS WHERE BBS_ID = #{bbsId}
+    </delete>
+
+    <delete id="deleteRecommend">
+        DELETE FROM TB_BBS_GOOD WHERE BBS_ID = #{bbsId}
+    </delete>
+
     <insert id="recommend">
         INSERT INTO TB_BBS_GOOD (BBS_ID, MEMBER_ID) VALUES (#{bbsId}, #{memberId});
     </insert>

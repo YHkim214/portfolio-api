@@ -20,6 +20,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * packageName    : com.yoonho.holostats.repositories
@@ -38,4 +39,8 @@ public interface BbsRepository {
     void insertBbs(@Param("bbs") Bbs bbs);
     void recommend(@Param("bbsId") Integer bbsId, @Param("memberId") Integer memberId);
     void cancelRecommend(@Param("bbsId") Integer bbsId, @Param("memberId") Integer memberId);
+    Optional<Bbs> getBbsById(@Param("bbsId") Integer bbsId);
+    void updateBbs(@Param("bbsContent") String content, @Param("bbsId") Integer bbsId);
+    void deleteBbs(@Param("bbsId") Integer bbsId);
+    void deleteRecommend(@Param("bbsId") Integer bbsId);
 }
