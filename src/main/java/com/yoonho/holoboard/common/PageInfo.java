@@ -8,7 +8,7 @@ import lombok.Data;
  * fileName       : PageInfo
  * author         : kim-yoonho
  * date           : 2/1/24
- * description    :
+ * description    : 페이징 처리를 위한 객체
  * ===========================================================
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------

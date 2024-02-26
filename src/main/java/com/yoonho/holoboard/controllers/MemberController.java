@@ -55,6 +55,7 @@ public class MemberController extends CommonController {
         return ResponseEntityWrapper.success(changeNicknameResponseDto);
     }
 
+    /** 비밀번호 변경 **/
     @PostMapping("/changePassword")
     public ResponseEntity changePassword(@RequestHeader("Authorization") String accessToken,
                                          @RequestBody ChangePasswordRequestDto changePasswordRequestDto) {

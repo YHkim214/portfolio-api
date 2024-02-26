@@ -17,7 +17,7 @@ import java.security.GeneralSecurityException;
  * fileName       : YoutubeConfig
  * author         : kim-yoonho
  * date           : 1/15/24
- * description    :
+ * description    : 유튜브 API설정 객체
  * ===========================================================
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------

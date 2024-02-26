@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
  * fileName       : BbsController
  * author         : kim-yoonho
  * date           : 1/31/24
- * description    :
+ * description    : 게시판 컨트롤러
  * ===========================================================
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------
@@ -33,7 +33,7 @@ public class BbsController {
         this.jwtGenerator = jwtGenerator;
     }
 
-    /*게시글 등록*/
+    /** 게시글 등록 **/
     @PostMapping("/insert")
     public ResponseEntity<?> insertBbs(
             @RequestHeader("Authorization") String accessToken,
@@ -45,7 +45,7 @@ public class BbsController {
         return ResponseEntityWrapper.success(null);
     }
 
-    /*게시글 목록 반환*/
+    /** 게시글 리스트 반환 **/
     @GetMapping("/list/{lsId}")
     public ResponseEntity<?> getBbsList(
             @RequestHeader(name = "Authorization", defaultValue = "") String accessToken,
@@ -64,7 +64,7 @@ public class BbsController {
         return ResponseEntityWrapper.success(getBbsListResponseDto);
     }
 
-    /*게시글 추천*/
+    /** 게시글 추천 **/
     @GetMapping("/recommend/{bbsId}")
     public ResponseEntity<?> recommend(
             @RequestHeader("Authorization") String accessToken,
@@ -83,7 +83,7 @@ public class BbsController {
         return ResponseEntityWrapper.success(null);
     }
 
-
+    /** 게시글 수정 **/
     @PostMapping("/update")
     public ResponseEntity<?> update(
             @RequestHeader("Authorization") String accessToken,
@@ -99,6 +99,7 @@ public class BbsController {
         return  ResponseEntityWrapper.success(null);
     }
 
+    /** 게시글 삭제 **/
     @PostMapping("/delete")
     public ResponseEntity<?> delete(
             @RequestHeader("Authorization") String accessToken,

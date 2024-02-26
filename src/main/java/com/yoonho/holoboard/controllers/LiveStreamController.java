@@ -15,7 +15,7 @@ import java.util.List;
  * fileName       : LiveStreamController
  * author         : kim-yoonho
  * date           : 1/19/24
- * description    :
+ * description    : 실시간 방송 컨트롤러
  * ===========================================================
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------
@@ -40,6 +40,7 @@ public class LiveStreamController extends CommonController {
         return ResponseEntityWrapper.success(liveStreamList);
     }
 
+    /** 라이브 스트리밍 정보 반환 **/
     @GetMapping("/{lsId}")
     public ResponseEntity<?> getLiveStream(@PathVariable("lsId") Integer lsId) {
         GetLiveStreamResponseDto getLiveStreamResponseDto = liveStreamService.getLiveStreamById(lsId);

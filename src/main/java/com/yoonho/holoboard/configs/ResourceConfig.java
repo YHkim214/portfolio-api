@@ -13,7 +13,7 @@ import java.nio.file.Paths;
  * fileName       : ResourceConfig
  * author         : kim-yoonho
  * date           : 1/4/24
- * description    :
+ * description    : 정적파일 업로드를 위한 경로조절 객체
  * ===========================================================
  * DATE              AUTHOR             NOTE
  * -----------------------------------------------------------
