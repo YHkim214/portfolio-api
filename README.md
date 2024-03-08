@@ -1,20 +1,33 @@
-포트폴리오 프로젝트명(가제): HoloBoard
+# 포트폴리오 프로젝트: HoloBoard
 
-기획의도: 유튜브 스트리밍 서비스를 수집해(크롤링과 Youtube Api활용) 실시간 상태 모니터링 정보를 제공하고, 해당 방송에 대한 커뮤니티 기능(게시판)제공
+ ## 기획의도
+- **Youtube Data API v3**를 활용하여 실시간 방송목록을 수집, 제공
+- **JWT인증**을 구현한 회원제 시스템
+- 실시간 방송 별 게시판 생성 및 커뮤니티 기능 제공
 
-사용기술: Spring boot, Mybatis, React.js
+## 사용기술
 
-주요 기능: 회원제 시스템, 실시간 스트리밍 방송 목록 및 정보 조회, 실시간 스트리밍 게시판
+### Back-End
+- JAVA(Open Jdk 21)
+- Spring Boot 3.2
+- Mybatis(*JPA로 변경 작업 중)
+- Spring Security
+- MY-SQL
 
-프로젝트 구성
+### Front-End
+- React.js
 
-1. 클라이언트 서버(React.js)
-    
-2. API서버(Spring boot)
+### TOOLS
+- IntelliJ
+- DBeaver
+- Postman
 
-3. 데이터 베이스(Mysql)
+### 프로젝트 구성도
 
 ![KakaoTalk_Image_2024-02-26-14-04-41](https://github.com/YHkim214/portfolio-api/assets/41041713/9efd3527-2ba8-4204-b759-eacfacf7aa4b)
+
+### 데이터 베이스 설계
+[여기에 이미지 업로드]
  
 주요 화면 구성
 
