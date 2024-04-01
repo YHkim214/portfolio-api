@@ -19,7 +19,7 @@ import java.io.IOException;
  * 1/19/24        kim-yoonho       최초 생성
  */
 
-//@Component
+@Component
 @Slf4j
 public class LiveStreamScheduler {
 

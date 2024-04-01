@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
  */
 
 @RestController
-@RequestMapping("/api/member")
+@RequestMapping("/api")
 public class MemberController extends CommonController {
 
     private final JwtGenerator jwtGenerator;
@@ -37,7 +37,7 @@ public class MemberController extends CommonController {
     }
 
     /** 회원정보 반환 **/
-    @GetMapping("/getMemberInfo")
+    @GetMapping("/member")
     public ResponseEntity getMemberInfo(@RequestHeader("Authorization") String accessToken) {
         String userName = jwtGenerator.getUserName(StringUtil.processRequestAccessToken(accessToken));
         GetMemberInfoResponseDto getMemberInfoResponseDto = memberService.getMemberByName(userName);

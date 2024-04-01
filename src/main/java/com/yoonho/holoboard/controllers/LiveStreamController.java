@@ -23,7 +23,7 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping("/api/liveStream")
+@RequestMapping("/api")
 public class LiveStreamController extends CommonController {
 
     private final LiveStreamService liveStreamService;
@@ -33,7 +33,7 @@ public class LiveStreamController extends CommonController {
     }
 
     /** 라이브 스트리밍 목록 반환 **/
-    @GetMapping("/list")
+    @GetMapping("/liveStream")
     public ResponseEntity<?> getLiveStreamList(@RequestParam("date") String date) {
         List<GetLiveStreamResponseDto> liveStreamList = liveStreamService.getLiveStreamList(new GetLiveStreamRequestDto(date));
 
@@ -41,7 +41,7 @@ public class LiveStreamController extends CommonController {
     }
 
     /** 라이브 스트리밍 정보 반환 **/
-    @GetMapping("/{lsId}")
+    @GetMapping("/liveStream/{lsId}")
     public ResponseEntity<?> getLiveStream(@PathVariable("lsId") Integer lsId) {
         GetLiveStreamResponseDto getLiveStreamResponseDto = liveStreamService.getLiveStreamById(lsId);
         return ResponseEntityWrapper.success(getLiveStreamResponseDto);

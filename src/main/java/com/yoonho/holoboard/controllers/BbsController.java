@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
  * 1/31/24        kim-yoonho       최초 생성
  */
 @RestController
-@RequestMapping("/api/bbs")
+@RequestMapping("/api")
 public class BbsController {
 
     private final BbsService bbsService;
@@ -34,7 +34,7 @@ public class BbsController {
     }
 
     /** 게시글 등록 **/
-    @PostMapping("/insert")
+    @PostMapping("/bbs")
     public ResponseEntity<?> insertBbs(
             @RequestHeader("Authorization") String accessToken,
             @RequestBody InsertBbsRequestDto insertBbsRequestDto) {
@@ -46,7 +46,7 @@ public class BbsController {
     }
 
     /** 게시글 리스트 반환 **/
-    @GetMapping("/list/{lsId}")
+    @GetMapping("/bbs/{lsId}")
     public ResponseEntity<?> getBbsList(
             @RequestHeader(name = "Authorization", defaultValue = "") String accessToken,
             GetBbsListRequestDto getBbsListRequestDto,
@@ -84,7 +84,7 @@ public class BbsController {
     }
 
     /** 게시글 수정 **/
-    @PostMapping("/update")
+    @PutMapping("/bbs")
     public ResponseEntity<?> update(
             @RequestHeader("Authorization") String accessToken,
             @RequestBody UpdateBbsRequestDto updateBbsRequestDto) {
@@ -100,7 +100,7 @@ public class BbsController {
     }
 
     /** 게시글 삭제 **/
-    @PostMapping("/delete")
+    @DeleteMapping("/bbs")
     public ResponseEntity<?> delete(
             @RequestHeader("Authorization") String accessToken,
             @RequestBody DeleteBbsRequestDto deleteBbsRequestDto
